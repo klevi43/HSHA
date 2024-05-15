@@ -1,5 +1,7 @@
 package org.hsha.hsha.models;
 
+import java.util.Date;
+
 public class Exercise {
 
     String name;
@@ -7,7 +9,8 @@ public class Exercise {
     int weightKg;
     int workoutId; // foreign key for workout table
     int reps; // reps completed this set
-
+    int entryNo; //
+    Date eDate;
     public Exercise(String name, String bodyPart, int weightKg, int reps) {
         this.name = name;
         this.bodyPart = bodyPart;
