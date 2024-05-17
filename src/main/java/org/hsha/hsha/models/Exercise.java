@@ -2,11 +2,16 @@ package org.hsha.hsha.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class Exercise {
+@Table(name="exercise")
+
+public class Exercise implements Serializable {
 
     @Id
     String name;
@@ -17,6 +22,10 @@ public class Exercise {
     public Exercise(String name, String bodyPart) {
         this.name = name;
         this.bodyPart = bodyPart;
+    }
+
+    public Exercise() {
+
     }
 
     public String getName() {

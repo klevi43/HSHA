@@ -2,6 +2,7 @@ package org.hsha.hsha.models;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 import java.util.Date;
@@ -12,6 +13,8 @@ public class Workout {
     Exercise exercise; // exercise performed
     int weightKg; // weight in Kg
     int reps; // reps performed this set (each entry is a set)
+    @Id
+    @GeneratedValue
     int workoutId; // identifies workout
     int userId; // used to associate workout with user
     Date date; // date workout completed
