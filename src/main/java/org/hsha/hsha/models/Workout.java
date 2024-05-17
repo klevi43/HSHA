@@ -1,13 +1,20 @@
 package org.hsha.hsha.models;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+import java.util.Date;
+@Entity
 public class Workout {
+
     String name; // name for the workout
     Exercise exercise; // exercise performed
     int weightKg; // weight in Kg
     int reps; // reps performed this set (each entry is a set)
     int workoutId; // identifies workout
     int userId; // used to associate workout with user
-
+    Date date; // date workout completed
 
     public Workout(String name, Exercise exercise) {
         this.name = name;
