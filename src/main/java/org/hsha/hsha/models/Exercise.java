@@ -1,8 +1,6 @@
 package org.hsha.hsha.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 
 import java.io.Serializable;
@@ -10,12 +8,12 @@ import java.util.Date;
 
 @Entity
 @Table(name="exercise")
-
 public class Exercise implements Serializable {
 
     @Id
-    String name;
-    String bodyPart; // body part(s) worked
+    @Column(name = "exercise_name")
+    private String name;
+    private String bodyPart; // body part(s) worked
 
 
 

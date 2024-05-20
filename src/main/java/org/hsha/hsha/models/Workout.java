@@ -1,23 +1,28 @@
 package org.hsha.hsha.models;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 
 import java.util.Date;
 @Entity
 public class Workout {
-
-    String name; // name for the workout
-    Exercise exercise; // exercise performed
-    int weightKg; // weight in Kg
-    int reps; // reps performed this set (each entry is a set)
     @Id
-    @GeneratedValue
     int workoutId; // identifies workout
+
+    private String name; // name for the workout
+
+
+    private Exercise exercise; // exercise performed
+    private int weightKg; // weight in Kg
+    private int reps; // reps performed this set (each entry is a set)
+
+
     int userId; // used to associate workout with user
     Date date; // date workout completed
+
+    public Workout() {
+    }
 
     public Workout(String name, Exercise exercise) {
         this.name = name;
@@ -32,6 +37,7 @@ public class Workout {
         this.name = name;
     }
 
+    @JoinColumn(name = "exercise_name")
     public Exercise getExercise() {
         return exercise;
     }
