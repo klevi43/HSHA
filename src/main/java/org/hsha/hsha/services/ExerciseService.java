@@ -16,4 +16,5 @@ public class ExerciseService {
     public List<Exercise> retrieveAllExercises() {
         return exerciseRepository.findAll();
     }
+    //
 }

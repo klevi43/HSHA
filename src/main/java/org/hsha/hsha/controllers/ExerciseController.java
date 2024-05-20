@@ -13,7 +13,7 @@ import java.util.List;
 public class ExerciseController {
     @Autowired
     private ExerciseService exerciseService;
-
+    //
     @GetMapping("/exercises")
     public List<Exercise>getExercises() {
         return exerciseService.retrieveAllExercises();

@@ -9,7 +9,7 @@ import java.util.Date;
 @Entity
 @Table(name="exercise")
 public class Exercise implements Serializable {
-
+    //
     @Id
     @Column(name = "exercise_name")
     private String name;

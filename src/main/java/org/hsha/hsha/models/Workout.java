@@ -12,7 +12,7 @@ public class Workout {
 
     private String name; // name for the workout
 
-
+    //
     private Exercise exercise; // exercise performed
     private int weightKg; // weight in Kg
     private int reps; // reps performed this set (each entry is a set)
