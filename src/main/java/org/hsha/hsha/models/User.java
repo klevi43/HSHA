@@ -3,8 +3,10 @@ package org.hsha.hsha.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name="user")
 public class User {
     @Id // tells spring that this is the primary key
     @GeneratedValue

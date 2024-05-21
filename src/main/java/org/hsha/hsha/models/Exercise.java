@@ -5,20 +5,23 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="exercise")
 public class Exercise implements Serializable {
     //
     @Id
-    @Column(name = "exercise_name")
-    private String name;
+    private Integer exerciseId;
+    private String exerciseName;
     private String bodyPart; // body part(s) worked
 
+    @ManyToMany(mappedBy = "exercises")
+    Set<Workout> workouts = new HashSet<>();
 
-
-    public Exercise(String name, String bodyPart) {
-        this.name = name;
+    public Exercise(String exerciseName, String bodyPart) {
+        this.exerciseName = exerciseName;
         this.bodyPart = bodyPart;
     }
 
@@ -26,12 +29,12 @@ public class Exercise implements Serializable {
 
     }
 
-    public String getName() {
-        return name;
+    public String getExerciseName() {
+        return exerciseName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String exerciseName) {
+        this.exerciseName = exerciseName;
     }
 
     public String getBodyPart() {

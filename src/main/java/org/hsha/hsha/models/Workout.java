@@ -5,15 +5,25 @@ import jakarta.persistence.*;
 
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
+@Table(name="workout")
 public class Workout {
     @Id
-    int workoutId; // identifies workout
+    Integer workoutId; // identifies workout
 
     private String name; // name for the workout
 
-    //
-    private Exercise exercise; // exercise performed
+    // FIX ME!!!!!!!
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(
+            name = "workout_exercise",
+            joinColumns = {@JoinColumn(name = "workout_id")},
+            inverseJoinColumns = {@JoinColumn(name = "exercise_id")}
+    )
+    private Set<Exercise> exercises = new HashSet<>(); // exercise performed
     private int weightKg; // weight in Kg
     private int reps; // reps performed this set (each entry is a set)
 
@@ -24,9 +34,8 @@ public class Workout {
     public Workout() {
     }
 
-    public Workout(String name, Exercise exercise) {
+    public Workout(String name) {
         this.name = name;
-        this.exercise = exercise;
     }
 
     public String getName() {
@@ -37,14 +46,6 @@ public class Workout {
         this.name = name;
     }
 
-    @JoinColumn(name = "exercise_name")
-    public Exercise getExercise() {
-        return exercise;
-    }
-
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
 
     public int getWeightKg() {
         return weightKg;
