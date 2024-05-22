@@ -1,5 +1,7 @@
 package org.hsha.hsha.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 
@@ -13,20 +15,33 @@ import java.util.Set;
 public class Exercise implements Serializable {
     //
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer exerciseId;
+    @JsonProperty("exerciseName")
     private String exerciseName;
+    @JsonProperty("bodyPart")
     private String bodyPart; // body part(s) worked
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "exercises")
     Set<Workout> workouts = new HashSet<>();
 
-    public Exercise(String exerciseName, String bodyPart) {
+    public Exercise(Integer exerciseId, String exerciseName, String bodyPart) {
+        this.exerciseId = exerciseId;
         this.exerciseName = exerciseName;
         this.bodyPart = bodyPart;
     }
 
     public Exercise() {
 
+    }
+
+    public Integer getExerciseId() {
+        return exerciseId;
+    }
+
+    public void setExerciseId(Integer exerciseId) {
+        this.exerciseId = exerciseId;
     }
 
     public String getExerciseName() {

@@ -25,7 +25,7 @@ public class ExerciseService {
         return exerciseRepository.save(exercise);
     }
 
-    public void deleteExercise(Integer exId) {
+    public void deleteExerciseById(Integer exId) {
         exerciseRepository.deleteById(exId);
     }
 }

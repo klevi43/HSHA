@@ -1,12 +1,16 @@
 package org.hsha.hsha.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.hsha.hsha.models.Exercise;
 import org.hsha.hsha.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +27,25 @@ public class ExerciseController {
     @GetMapping("/exercises/{exId}")
     public Optional<Exercise> getExerciseById(@PathVariable(value = "exId") Integer id) {
         return exerciseService.retrieveExerciseById(id);
+    }
+
+    @PostMapping("/exercises")
+    public ResponseEntity<Exercise> createExercise(@RequestBody Exercise exercise, HttpServletRequest request) throws ServerException {
+        exerciseService.createExercise(exercise);
+        if (exercise != null) {
+            URI location = ServletUriComponentsBuilder.fromRequestUri(request)
+                    .path("/{id}")
+                    .buildAndExpand(exercise.getExerciseId())
+                    .toUri();
+            return ResponseEntity.created(location).body(exercise);
+        } else {
+            throw new ServerException("Error in creating new exercise");
+        }
+    }
+
+    @DeleteMapping("/exercises/{id}")
+    public void deleteExercise(@PathVariable(value = "id") Integer exId) {
+        exerciseService.deleteExerciseById(exId);
     }
 
 }
