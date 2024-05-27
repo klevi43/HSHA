@@ -1,5 +1,6 @@
 package org.hsha.hsha.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
@@ -11,45 +12,54 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="exercise")
+@Table(name="exercise_tbl")
 public class Exercise implements Serializable {
     //
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer exerciseId;
-    @JsonProperty("exerciseName")
-    private String exerciseName;
-    @JsonProperty("bodyPart")
+    private Integer id;
+
+    private String name;
+
     private String bodyPart; // body part(s) worked
+    private Integer weightInKg;
+    private Integer reps;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "exercises")
-    Set<Workout> workouts = new HashSet<>();
+    @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
+    @JsonBackReference
+    private Set<Workout> workouts = new HashSet<>();
 
-    public Exercise(Integer exerciseId, String exerciseName, String bodyPart) {
-        this.exerciseId = exerciseId;
-        this.exerciseName = exerciseName;
+
+    // CONSTRUCTORS
+    public Exercise(Integer id, String name, String bodyPart, Integer weightInKg, Integer reps, Set<Workout> workouts) {
+        this.id = id;
+        this.name = name;
         this.bodyPart = bodyPart;
+        this.weightInKg = weightInKg;
+        this.reps = reps;
+        this.workouts = workouts;
     }
 
     public Exercise() {
 
     }
 
-    public Integer getExerciseId() {
-        return exerciseId;
+
+    // GETTERS AND SETTERS
+    public Integer getId() {
+        return id;
     }
 
-    public void setExerciseId(Integer exerciseId) {
-        this.exerciseId = exerciseId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getExerciseName() {
-        return exerciseName;
+    public String getName() {
+        return name;
     }
 
-    public void setName(String exerciseName) {
-        this.exerciseName = exerciseName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBodyPart() {
@@ -60,6 +70,27 @@ public class Exercise implements Serializable {
         this.bodyPart = bodyPart;
     }
 
+    public Integer getWeightInKg() {
+        return weightInKg;
+    }
 
+    public void setWeightInKg(Integer weightInKg) {
+        this.weightInKg = weightInKg;
+    }
 
+    public Integer getReps() {
+        return reps;
+    }
+
+    public void setReps(Integer reps) {
+        this.reps = reps;
+    }
+
+    public Set<Workout> getWorkouts() {
+        return workouts;
+    }
+
+    public void setWorkouts(Set<Workout> workouts) {
+        this.workouts = workouts;
+    }
 }

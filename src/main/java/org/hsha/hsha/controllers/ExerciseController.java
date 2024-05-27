@@ -24,9 +24,14 @@ public class ExerciseController {
         return exerciseService.retrieveAllExercises();
     }
 
-    @GetMapping("/exercises/{exId}")
-    public Optional<Exercise> getExerciseById(@PathVariable(value = "exId") Integer id) {
+    @GetMapping("/exercises/{id}")
+    public Optional<Exercise> getExerciseById(@PathVariable(value = "id") Integer id) {
         return exerciseService.retrieveExerciseById(id);
+    }
+
+    @GetMapping("/exercises/{name}")
+    public Optional<Exercise> getExerciseByName(@PathVariable(value = "name") String name) {
+        return exerciseService.retrieveExerciseByname(name);
     }
 
     @PostMapping("/exercises")
@@ -35,7 +40,7 @@ public class ExerciseController {
         if (exercise != null) {
             URI location = ServletUriComponentsBuilder.fromRequestUri(request)
                     .path("/{id}")
-                    .buildAndExpand(exercise.getExerciseId())
+                    .buildAndExpand(exercise.getId())
                     .toUri();
             return ResponseEntity.created(location).body(exercise);
         } else {

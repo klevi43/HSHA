@@ -21,6 +21,10 @@ public class ExerciseService {
     public Optional<Exercise> retrieveExerciseById(Integer exId) {
         return exerciseRepository.findById(exId);
     }
+
+    public Optional<Exercise> retrieveExerciseByname(String name) {
+        return exerciseRepository.findByNameContaining(name);
+    }
     public Exercise createExercise(Exercise exercise) {
         return exerciseRepository.save(exercise);
     }
