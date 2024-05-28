@@ -25,7 +25,7 @@ public class ExerciseService {
     public Optional<Exercise> retrieveExerciseByname(String name) {
         return exerciseRepository.findByNameContaining(name);
     }
-    public Exercise createExercise(Exercise exercise) {
+    public Exercise saveExercise(Exercise exercise) {
         return exerciseRepository.save(exercise);
     }
 

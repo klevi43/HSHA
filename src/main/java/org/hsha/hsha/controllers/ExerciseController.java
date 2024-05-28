@@ -1,6 +1,7 @@
 package org.hsha.hsha.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.hsha.hsha.models.Exercise;
 import org.hsha.hsha.services.ExerciseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class ExerciseController {
 
     @PostMapping("/exercises")
     public ResponseEntity<Exercise> createExercise(@RequestBody Exercise exercise, HttpServletRequest request) throws ServerException {
-        exerciseService.createExercise(exercise);
+        exerciseService.saveExercise(exercise);
         if (exercise != null) {
             URI location = ServletUriComponentsBuilder.fromRequestUri(request)
                     .path("/{id}")
@@ -47,7 +48,7 @@ public class ExerciseController {
             throw new ServerException("Error in creating new exercise");
         }
     }
-
+    @Transactional
     @DeleteMapping("/exercises/{id}")
     public void deleteExercise(@PathVariable(value = "id") Integer exId) {
         exerciseService.deleteExerciseById(exId);

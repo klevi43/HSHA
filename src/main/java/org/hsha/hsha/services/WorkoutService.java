@@ -25,7 +25,7 @@ public class WorkoutService {
         return workoutRepository.findWorkoutByName(name);
     }
 
-    public Workout createWorkout(@RequestBody Workout workout) {
+    public Workout saveWorkout(@RequestBody Workout workout) {
         return workoutRepository.save(workout);
     }
 

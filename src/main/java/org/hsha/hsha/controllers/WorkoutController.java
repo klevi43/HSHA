@@ -29,6 +29,6 @@ public class WorkoutController {
 
     @PostMapping("/workouts")
     public Workout createWorkout(@RequestBody Workout workout) {
-        return workoutService.createWorkout(workout);
+        return workoutService.saveWorkout(workout);
     }
 }
