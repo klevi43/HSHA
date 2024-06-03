@@ -16,7 +16,7 @@ public class User {
     @OneToMany(mappedBy = "user") // defining the field that owns the workouts
     @JsonIgnore // workouts will no longer be part of the user requests
     private List<Workout> workouts;
-
+//
     public User(Integer id, String username, String password) {
         this.id = id;
         this.username = username;

@@ -41,7 +41,7 @@ public class UserController {
         }
         return user.get().getWorkouts();
     }
-
+//
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user, HttpServletRequest request) throws ServerException{
         userService.saveUser(user);

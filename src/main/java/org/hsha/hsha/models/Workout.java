@@ -43,7 +43,7 @@ public class Workout {
         this.date = date;
         this.exercises = exercises;
     }
-
+//
     public Workout() {
     }
 
