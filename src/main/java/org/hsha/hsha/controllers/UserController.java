@@ -3,6 +3,7 @@ package org.hsha.hsha.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.hsha.hsha.models.User;
+import org.hsha.hsha.models.Workout;
 import org.hsha.hsha.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,16 @@ public class UserController {
     @GetMapping("/users/{id}")
     public Optional<User> getUserById(@PathVariable(value = "id") Integer id) {
         return userService.retrieveUserById(id);
+    }
+
+    @GetMapping("/users/{id}/workouts")
+    public List<Workout> getAllUserWorkouts(@PathVariable int id) throws Exception {
+        Optional<User> user = userService.retrieveUserById(id);
+
+        if(user.isEmpty()) {
+            throw new Exception("id:" + id);
+        }
+        return user.get().getWorkouts();
     }
 
     @PostMapping("/users")

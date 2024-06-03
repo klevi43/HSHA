@@ -2,6 +2,7 @@ package org.hsha.hsha.services;
 
 import org.hsha.hsha.Repository.UserRepository;
 import org.hsha.hsha.models.User;
+import org.hsha.hsha.models.Workout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

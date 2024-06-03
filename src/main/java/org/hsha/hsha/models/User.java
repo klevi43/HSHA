@@ -1,9 +1,9 @@
 package org.hsha.hsha.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Table(name="user_tbl")
@@ -13,11 +13,15 @@ public class User {
     Integer id;
     String username;
     String password;
+    @OneToMany(mappedBy = "user") // defining the field that owns the workouts
+    @JsonIgnore // workouts will no longer be part of the user requests
+    private List<Workout> workouts;
 
     public User(Integer id, String username, String password) {
         this.id = id;
         this.username = username;
         this.password = password;
+
     }
     //
     public User() {
@@ -46,5 +50,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Workout> getWorkouts() {
+        return workouts;
+    }
+
+    public void setWorkouts(List<Workout> workouts) {
+        this.workouts = workouts;
     }
 }

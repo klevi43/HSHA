@@ -1,6 +1,7 @@
 package org.hsha.hsha.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,10 +18,13 @@ public class Workout {
     Integer id; // identifies workout
 
     private String name; // name for the workout
-    int userId; // used to associate workout with user
 
-    Date date; // date workout completed
 
+    private Date date; // date workout completed
+
+    @ManyToOne(fetch = FetchType.LAZY) // if you want to retrieve the user and workout details in the same query, user eager strategy
+    @JsonIgnore
+    private User user;
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "workout_exercise_tbl",
@@ -32,10 +36,10 @@ public class Workout {
 
 
     // CONSTRUCTORS
-    public Workout(Integer id, String name, int userId, Date date, Set<Exercise> exercises) {
+    public Workout(Integer id, String name, Date date, Set<Exercise> exercises) {
         this.id = id;
         this.name = name;
-        this.userId = userId;
+
         this.date = date;
         this.exercises = exercises;
     }
@@ -58,14 +62,6 @@ public class Workout {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public Date getDate() {
