@@ -8,6 +8,7 @@ import org.hsha.hsha.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -17,7 +18,7 @@ import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
+@Controller
 public class UserController {
     @Autowired
     UserService userService;
@@ -42,6 +43,19 @@ public class UserController {
         return user.get().getWorkouts();
     }
 //
+    @GetMapping("/users/{id}/thWorkouts")
+    public String getUserThWorkouts(@PathVariable int id, Model model) throws Exception {
+        Optional<User> user = userService.retrieveUserById(id);
+
+        if(user.isEmpty()) {
+            throw new Exception("id: " + id);
+        }
+        List<Workout> userWorkout = user.get().getWorkouts();
+        model.addAttribute("userWorkouts", userWorkout);
+        return "thymeleafEx/UserWorkouts";
+    }
+
+
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user, HttpServletRequest request) throws ServerException{
         userService.saveUser(user);
