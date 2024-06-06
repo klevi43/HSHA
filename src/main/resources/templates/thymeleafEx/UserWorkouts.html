@@ -9,19 +9,40 @@
         <div>
             <h1>Your Workouts</h1>
         </div>
-        <div>
+
 <!--            <span th:text="${userWorkouts.name}"></span>-->
-        <thead>
-        <tr>
-            <td>Workout Name</td>
-        </tr>
-        </thead>
+        <table border="1">
+            <thead>
+                <tr>
+                    <td>Workout Name</td>
+                </tr>
+
+            </thead>
+
+
             <tbody>
                 <tr th:each="userWorkouts, status: ${userWorkouts}">
                     <td th:text="${userWorkouts.name}"></td>
                 </tr>
             </tbody>
-        </div>
+            <thead>
+                <tr>
+                    <td>Exercise Name</td>
+                    <td>Weight in Kg</td>
+                    <td>Reps</td>
+                    <td>Body Part</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="userExercises, status: ${userExercises}">
+                    <td th:text="${userExercises.name}"></td>
+                    <td th:text="${userExercises.weightInKg}"></td>
+                    <td th:text="${userExercises.reps}"></td>
+                    <td th:text="${userExercises.bodyPart}"></td>
+                </tr>
+            </tbody>
+        </table>
+
 
     </div>
 </body>

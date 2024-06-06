@@ -1,17 +1,16 @@
 package org.hsha.hsha.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
+import java.util.*;
 
 @Entity
 @Table(name="workout_tbl")
+
 public class Workout {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -22,24 +21,26 @@ public class Workout {
 
     private Date date; // date workout completed
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY) // if you want to retrieve the user and workout details in the same query, user eager strategy
-    @JsonIgnore
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
+
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JoinTable(
             name = "workout_exercise_tbl",
             joinColumns = {@JoinColumn(name = "workout_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "exercise_id", referencedColumnName = "id")}
     )
-    @JsonManagedReference
-    private Set<Exercise> exercises = new HashSet<>(); // exercise performed
+    private List<Exercise> exercises = new ArrayList<>(); // exercise performed
 
 
     // CONSTRUCTORS
-    public Workout(Integer id, String name, Date date, Set<Exercise> exercises) {
+    public Workout(Integer id, String name, Date date, List<Exercise> exercises) {
         this.id = id;
         this.name = name;
-
+        //this.user = user;
         this.date = date;
         this.exercises = exercises;
     }
@@ -72,12 +73,20 @@ public class Workout {
         this.date = date;
     }
 
-    public Set<Exercise> getExercises() {
+    public List<Exercise> getExercises() {
         return exercises;
     }
 
-    public void setExercises(Set<Exercise> exercises) {
+    public void setExercises(List<Exercise> exercises) {
         this.exercises = exercises;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
 

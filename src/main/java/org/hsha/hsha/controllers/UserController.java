@@ -2,9 +2,11 @@ package org.hsha.hsha.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
+import org.hsha.hsha.models.Exercise;
 import org.hsha.hsha.models.User;
 import org.hsha.hsha.models.Workout;
 import org.hsha.hsha.services.UserService;
+import org.hsha.hsha.services.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -17,11 +19,14 @@ import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    private WorkoutService workoutService;
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
@@ -40,9 +45,9 @@ public class UserController {
         if(user.isEmpty()) {
             throw new Exception("id:" + id);
         }
-        return user.get().getWorkouts();
+        return user.get().getWorkouts().stream().toList();
     }
-//
+
     @GetMapping("/users/{id}/thWorkouts")
     public String getUserThWorkouts(@PathVariable int id, Model model) throws Exception {
         Optional<User> user = userService.retrieveUserById(id);
@@ -50,8 +55,10 @@ public class UserController {
         if(user.isEmpty()) {
             throw new Exception("id: " + id);
         }
-        List<Workout> userWorkout = user.get().getWorkouts();
-        model.addAttribute("userWorkouts", userWorkout);
+        List<Workout> userWorkouts = user.get().getWorkouts().stream().toList();
+        List<Exercise> userExercises = userWorkouts.get(0).getExercises();
+        model.addAttribute("userWorkouts", userWorkouts);
+        model.addAttribute("userExercises", userExercises);
         return "thymeleafEx/UserWorkouts";
     }
 
@@ -69,6 +76,23 @@ public class UserController {
             throw new ServerException("Error in creating user");
         }
 
+    }
+    @PostMapping("user/{id}/workouts")
+    public ResponseEntity<Object> createUserWorkout(@RequestBody Workout workout, @RequestParam String id) throws UserPrincipalNotFoundException, ServerException {
+
+        // Search for user
+        Optional<User> user = userService.retrieveUserById(Integer.valueOf(id));
+
+
+        workout.setUser(user.get()); // need .get() because this is an optional
+        Workout savedWorkout = workoutService.saveWorkout(workout); // saved workout
+
+
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(savedWorkout.getId())
+                    .toUri();
+        return ResponseEntity.created(location).build();
     }
 
 

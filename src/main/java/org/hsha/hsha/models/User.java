@@ -1,9 +1,15 @@
 package org.hsha.hsha.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="user_tbl")
@@ -13,14 +19,16 @@ public class User {
     Integer id;
     String username;
     String password;
-    @OneToMany(mappedBy = "user") // defining the field that owns the workouts
-    @JsonIgnore // workouts will no longer be part of the user requests
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) // defining the field that owns the workouts
+    @JsonManagedReference
+    @JsonIgnore
     private List<Workout> workouts;
 //
-    public User(Integer id, String username, String password) {
+    public User(Integer id, String username, String password, List<Workout> workouts) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.workouts = workouts;
 
     }
     //
