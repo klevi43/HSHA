@@ -27,6 +27,7 @@ public class Exercise implements Serializable {
 
     @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
     @JsonBackReference
+    @JsonIgnore
     private Set<Workout> workouts = new HashSet<>();
 
 

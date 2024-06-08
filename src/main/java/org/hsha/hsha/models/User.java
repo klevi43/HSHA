@@ -19,23 +19,26 @@ public class User {
     Integer id;
     String username;
     String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER) // defining the field that owns the workouts
-    @JsonManagedReference
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // defining the field that owns the workouts
     @JsonIgnore
     private List<Workout> workouts;
-//
+
+    // CONSTRUCTORS
     public User(Integer id, String username, String password, List<Workout> workouts) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.workouts = workouts;
 
+
     }
-    //
+
     public User() {
 
     }
 
+    // GETTERS AND SETTERS
     public Integer getId() {
         return id;
     }

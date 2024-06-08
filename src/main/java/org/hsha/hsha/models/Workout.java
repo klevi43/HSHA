@@ -21,10 +21,9 @@ public class Workout {
 
     private Date date; // date workout completed
 
-    @JsonBackReference
-    @ManyToOne(fetch = FetchType.LAZY) // if you want to retrieve the user and workout details in the same query, user eager strategy
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
-    private User user;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    User user;
 
     @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
@@ -33,14 +32,15 @@ public class Workout {
             joinColumns = {@JoinColumn(name = "workout_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "exercise_id", referencedColumnName = "id")}
     )
-    private List<Exercise> exercises = new ArrayList<>(); // exercise performed
+    @JsonIgnore
+    private List<Exercise> exercises; // exercise performed
 
 
     // CONSTRUCTORS
-    public Workout(Integer id, String name, Date date, List<Exercise> exercises) {
+    public Workout(Integer id, String name, Date date, List<Exercise> exercises, User user) {
         this.id = id;
         this.name = name;
-        //this.user = user;
+        this.user = user;
         this.date = date;
         this.exercises = exercises;
     }

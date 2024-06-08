@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@Controller
+@RestController
 public class UserController {
     @Autowired
     UserService userService;
@@ -45,23 +45,38 @@ public class UserController {
         if(user.isEmpty()) {
             throw new Exception("id:" + id);
         }
-        return user.get().getWorkouts().stream().toList();
+        return user.get().getWorkouts();
     }
 
-    @GetMapping("/users/{id}/thWorkouts")
-    public String getUserThWorkouts(@PathVariable int id, Model model) throws Exception {
+//    @GetMapping("/users/{id}/thWorkouts")
+//    public String getUserThWorkouts(@PathVariable int id, Model model) throws Exception {
+//        Optional<User> user = userService.retrieveUserById(id);
+//
+//        if(user.isEmpty()) {
+//            throw new Exception("id: " + id);
+//        }
+//        List<Workout> userWorkouts = user.get().getWorkouts().stream().toList();
+//        List<Exercise> userExercises = userWorkouts.get(0).getExercises();
+//        model.addAttribute("userWorkouts", userWorkouts);
+//        model.addAttribute("userExercises", userExercises);
+//        return "thymeleafEx/UserWorkouts";
+//    }
+@PostMapping("/users/{id}/workouts")
+public ResponseEntity<Workout> createWorkout(@PathVariable int id, @RequestBody Workout workout, HttpServletRequest request) throws Exception {
         Optional<User> user = userService.retrieveUserById(id);
-
         if(user.isEmpty()) {
-            throw new Exception("id: " + id);
+            throw new Exception("User not found!");
         }
-        List<Workout> userWorkouts = user.get().getWorkouts().stream().toList();
-        List<Exercise> userExercises = userWorkouts.get(0).getExercises();
-        model.addAttribute("userWorkouts", userWorkouts);
-        model.addAttribute("userExercises", userExercises);
-        return "thymeleafEx/UserWorkouts";
-    }
+        workout.setUser(user.get());
+        Workout savedWorkout = workoutService.saveWorkout(workout);
 
+        URI location = ServletUriComponentsBuilder.fromRequestUri(request)
+                .path("/{id}")
+                .buildAndExpand(savedWorkout.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(workout);
+
+}
 
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user, HttpServletRequest request) throws ServerException{
@@ -77,23 +92,7 @@ public class UserController {
         }
 
     }
-    @PostMapping("user/{id}/workouts")
-    public ResponseEntity<Object> createUserWorkout(@RequestBody Workout workout, @RequestParam String id) throws UserPrincipalNotFoundException, ServerException {
 
-        // Search for user
-        Optional<User> user = userService.retrieveUserById(Integer.valueOf(id));
-
-
-        workout.setUser(user.get()); // need .get() because this is an optional
-        Workout savedWorkout = workoutService.saveWorkout(workout); // saved workout
-
-
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(savedWorkout.getId())
-                    .toUri();
-        return ResponseEntity.created(location).build();
-    }
 
 
     @Transactional
