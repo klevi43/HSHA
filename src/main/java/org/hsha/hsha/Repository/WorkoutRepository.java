@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface WorkoutRepository extends JpaRepository<Workout, Integer> {
 //
     Optional<Workout> findWorkoutByName(String name);
+    void deleteWorkoutById(int id);
 }

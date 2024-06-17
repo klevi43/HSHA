@@ -96,19 +96,10 @@ public ResponseEntity<Workout> createWorkout(@PathVariable int id, @RequestBody 
 
 }
 
-@DeleteMapping("/users/{id}/workouts/{workoutIndex}")
-public void deleteWorkout(@PathVariable int id, @PathVariable int workoutIndex, HttpServletRequest request) throws Exception {
-        Optional<User> user = userService.retrieveUserById(id);
-        if(user.isEmpty()) {
-            throw new Exception("User not found!");
-        }
-        Workout userWorkout = user.get().getWorkouts().get(workoutIndex);
-
-        if(userWorkout == null) {
-            throw new Exception("workoutIndex:" + workoutIndex);
-        }
-        workoutService.deleteWorkoutById(userWorkout.getId());
-
+@DeleteMapping("/users/{id}/workouts/{workoutId}")
+public ResponseEntity<Void> deleteWorkoutById(@PathVariable(value = "workoutId") int workoutId, HttpServletRequest request) throws Exception {
+        workoutService.deleteWorkoutById(workoutId);
+        return ResponseEntity.noContent().build();
 }
 
     @PostMapping("/users")
