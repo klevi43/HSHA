@@ -25,6 +25,9 @@ public class WorkoutService {
         return workoutRepository.findWorkoutByName(name);
     }
 
+    public void deleteWorkoutById(int id) {
+        workoutRepository.deleteById(id);
+    }
     public Workout saveWorkout(@RequestBody Workout workout) {
         return workoutRepository.save(workout);
     }
