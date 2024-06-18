@@ -1,6 +1,7 @@
 package org.hsha.hsha.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import org.hsha.hsha.models.Workout;
 import org.hsha.hsha.services.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,12 @@ public class WorkoutController {
             throw new ServerException("Error in creating new workout");
         }
 
+    }
+
+    @Transactional
+    @DeleteMapping("/workouts/{id}")
+    public ResponseEntity<Void> deleteWorkout(@PathVariable int id) {
+        workoutService.deleteWorkoutById(id);
+        return ResponseEntity.noContent().build();
     }
 }

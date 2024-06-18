@@ -20,7 +20,7 @@ public class User {
     String username;
     String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) // defining the field that owns the workouts
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY) // defining the field that owns the workouts
     @JsonIgnore
     private List<Workout> workouts;
 

@@ -26,7 +26,7 @@ public class WorkoutService {
     }
 
     public void deleteWorkoutById(int id) {
-        workoutRepository.deleteById(id);
+        workoutRepository.deleteWorkoutById(id);
     }
     public Workout saveWorkout(@RequestBody Workout workout) {
         return workoutRepository.save(workout);

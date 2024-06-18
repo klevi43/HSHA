@@ -21,7 +21,7 @@ public class Workout {
 
     private Date date; // date workout completed
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JsonIgnore
     User user;
 

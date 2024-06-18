@@ -50,7 +50,7 @@ public class UserController {
 
     @GetMapping("users/{id}/workouts/{workoutId}")
     public Workout getUserWorkoutById(@PathVariable int id,
-                                      @PathVariable int workoutId, HttpServletRequest request)
+                                      @PathVariable int workoutId)
             throws Exception {
         Optional<User> user = userService.retrieveUserById(id);
         if(user.isEmpty()) {
@@ -95,9 +95,10 @@ public ResponseEntity<Workout> createWorkout(@PathVariable int id, @RequestBody 
         return ResponseEntity.created(location).body(workout);
 
 }
-
+@Transactional
 @DeleteMapping("/users/{id}/workouts/{workoutId}")
-public ResponseEntity<Void> deleteWorkoutById(@PathVariable(value = "workoutId") int workoutId, HttpServletRequest request) throws Exception {
+public ResponseEntity<Void> deleteWorkoutById(@PathVariable(value = "workoutId") int workoutId) throws Exception {
+
         workoutService.deleteWorkoutById(workoutId);
         return ResponseEntity.noContent().build();
 }
