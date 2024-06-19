@@ -8,6 +8,7 @@ import org.hsha.hsha.models.Workout;
 import org.hsha.hsha.services.UserService;
 import org.hsha.hsha.services.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -125,4 +126,22 @@ public ResponseEntity<Void> deleteWorkoutById(@PathVariable(value = "workoutId")
     public void deleteUser(@PathVariable(value = "id") Integer id) {
         userService.deleteUserById(id);
     }
+
+    @Modifying
+    @PutMapping("/users/{id}")
+    public User updateUserById(@PathVariable int id, @RequestBody User user) throws ServerException {
+        Optional<User> updatedUser = userService.retrieveUserById(id);
+        if(updatedUser.isEmpty()) {
+            throw new ServerException("User not found!");
+        }
+        if (user.getUsername() != null)
+            updatedUser.get().setUsername(user.getUsername());
+        if (user.getPassword() != null)
+            updatedUser.get().setPassword(user.getPassword());
+
+        userService.saveUser(updatedUser.get());
+        return user;
+    }
+
+
 }
