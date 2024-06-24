@@ -18,6 +18,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.rmi.ServerException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -143,5 +145,34 @@ public ResponseEntity<Void> deleteWorkoutById(@PathVariable(value = "workoutId")
         return user;
     }
 
+    @Modifying
+    @PutMapping("/users/{userId}/workouts/{wId}")
+    public Workout updateUserWorkoutById(@PathVariable Integer userId, @PathVariable Integer wId,
+                                         @RequestBody Workout workout) throws ServerException {
+        Optional<User> userTocheck = userService.retrieveUserById(userId);
+        if(userTocheck.isEmpty()) {
+            throw new ServerException("User " + userId +  " not found!");
+        }
+        // get workout based
+        Optional<Workout> updatedWorkout = workoutService.retrieveWorkoutById(wId);
+        if(updatedWorkout.isEmpty()) {
+            throw new ServerException("Workout " + wId + " not found!");
+        }
+        if(workout.getDate() != null) {
+            updatedWorkout.get().setDate(workout.getDate());
+        }
+
+        if(workout.getName() != null) {
+            updatedWorkout.get().setName(workout.getName());
+        }
+
+        if(workout.getExercises() != null) {
+            updatedWorkout.get().setExercises(workout.getExercises());
+        }
+
+        workoutService.saveWorkout(updatedWorkout.get());
+
+        return updatedWorkout.get();
+    }
 
 }

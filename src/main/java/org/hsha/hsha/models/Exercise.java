@@ -25,20 +25,19 @@ public class Exercise implements Serializable {
     private Integer weightInKg;
     private Integer reps;
 
-    @ManyToMany(mappedBy = "exercises", fetch = FetchType.LAZY)
-    @JsonBackReference
+    @ManyToOne
     @JsonIgnore
-    private Set<Workout> workouts = new HashSet<>();
+    private Workout workout;
 
 
     // CONSTRUCTORS
-    public Exercise(Integer id, String name, String bodyPart, Integer weightInKg, Integer reps, Set<Workout> workouts) {
+    public Exercise(Integer id, String name, String bodyPart, Integer weightInKg, Integer reps, Workout workout) {
         this.id = id;
         this.name = name;
         this.bodyPart = bodyPart;
         this.weightInKg = weightInKg;
         this.reps = reps;
-        this.workouts = workouts;
+        this.workout = workout;
     }
 
     public Exercise() {
@@ -87,11 +86,11 @@ public class Exercise implements Serializable {
         this.reps = reps;
     }
 
-    public Set<Workout> getWorkouts() {
-        return workouts;
+    public Workout getWorkout() {
+        return workout;
     }
 
-    public void setWorkouts(Set<Workout> workouts) {
-        this.workouts = workouts;
+    public void setWorkouts(Workout workout) {
+        this.workout = workout;
     }
 }

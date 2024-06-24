@@ -3,9 +3,11 @@ package org.hsha.hsha.models;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import org.springframework.validation.annotation.Validated;
 
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
 @Entity
@@ -19,25 +21,20 @@ public class Workout {
     private String name; // name for the workout
 
 
-    private Date date; // date workout completed
+    private LocalDate date; // date workout completed
 
     @ManyToOne
     @JsonIgnore
     User user;
 
-    @JsonManagedReference
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "workout_exercise_tbl",
-            joinColumns = {@JoinColumn(name = "workout_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "exercise_id", referencedColumnName = "id")}
-    )
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @JsonIgnore
     private List<Exercise> exercises; // exercise performed
 
 
     // CONSTRUCTORS
-    public Workout(Integer id, String name, Date date, List<Exercise> exercises, User user) {
+    public Workout(Integer id, String name, LocalDate date, List<Exercise> exercises, User user) {
         this.id = id;
         this.name = name;
         this.user = user;
@@ -65,11 +62,11 @@ public class Workout {
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

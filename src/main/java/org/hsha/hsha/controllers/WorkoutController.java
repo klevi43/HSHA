@@ -35,6 +35,7 @@ public class WorkoutController {
 
     @PostMapping("/workouts")
     public ResponseEntity<Workout> createWorkout(@RequestBody Workout workout, HttpServletRequest request) throws ServerException {
+
         workoutService.saveWorkout(workout);
         if (workout != null) {
             URI location = ServletUriComponentsBuilder.fromRequestUri(request)
