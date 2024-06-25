@@ -16,7 +16,7 @@ import java.util.*;
 public class Workout {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    Integer id; // identifies workout
+    private Integer id; // identifies workout
 
     private String name; // name for the workout
 
@@ -25,10 +25,10 @@ public class Workout {
 
     @ManyToOne
     @JsonIgnore
-    User user;
+    private User user;
 
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "workout", cascade = {CascadeType.ALL}) // defining the field that owns the workouts
     @JsonIgnore
     private List<Exercise> exercises; // exercise performed
 

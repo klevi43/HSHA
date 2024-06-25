@@ -1,19 +1,17 @@
 package org.hsha.hsha.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Entity
 @Table(name="exercise_tbl")
-public class Exercise implements Serializable {
+public class Exercise {
     //
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,7 +24,7 @@ public class Exercise implements Serializable {
     private Integer reps;
 
     @ManyToOne
-    @JsonIgnore
+
     private Workout workout;
 
 
