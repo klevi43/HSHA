@@ -29,8 +29,8 @@ public class Workout {
 
 
     @OneToMany(mappedBy = "workout", cascade = {CascadeType.ALL}) // defining the field that owns the workouts
-    @JsonIgnore
     private List<Exercise> exercises; // exercise performed
+
 
 
     // CONSTRUCTORS
@@ -40,6 +40,7 @@ public class Workout {
         this.user = user;
         this.date = date;
         this.exercises = exercises;
+
     }
 //
     public Workout() {
@@ -85,5 +86,7 @@ public class Workout {
     public void setUser(User user) {
         this.user = user;
     }
+
+
 }
 
