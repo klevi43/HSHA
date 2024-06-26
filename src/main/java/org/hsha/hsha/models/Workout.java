@@ -32,7 +32,7 @@ public class Workout {
     private List<Exercise> exercises; // exercise performed
 
 
-
+//
     // CONSTRUCTORS
     public Workout(Integer id, String name, LocalDate date, List<Exercise> exercises, User user) {
         this.id = id;

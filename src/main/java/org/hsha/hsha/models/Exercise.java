@@ -26,7 +26,7 @@ public class Exercise {
     @ManyToOne
     private Workout workout;
 
-   
+   //
 
     // CONSTRUCTORS
     public Exercise(Integer id, String name, String bodyPart, Integer weightInKg, Integer reps, Workout workout) {
