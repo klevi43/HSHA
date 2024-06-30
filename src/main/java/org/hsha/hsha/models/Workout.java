@@ -28,7 +28,8 @@ public class Workout {
     private User user;
 
 
-    @OneToMany(mappedBy = "workout", cascade = {CascadeType.ALL}) // defining the field that owns the workouts
+    @OneToMany(mappedBy = "workout", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY,
+    orphanRemoval = true) // defining the field that owns the workouts
     private List<Exercise> exercises; // exercise performed
 
 

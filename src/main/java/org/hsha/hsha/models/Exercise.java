@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name="exercise_tbl")
-public class Exercise {
+public class Exercise implements Serializable {
     //
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,7 +22,7 @@ public class Exercise {
     private String bodyPart; // body part(s) worked
     private Integer weightInKg;
     private Integer reps;
-
+    @JsonIgnore
     @ManyToOne
     private Workout workout;
 
