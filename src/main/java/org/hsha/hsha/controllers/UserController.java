@@ -143,50 +143,53 @@ public ResponseEntity<Workout> createUserWorkout(@PathVariable Integer userId, @
 
 }
 @Transactional
-@DeleteMapping("/users/{userId}/workouts/{workoutInd}")
-public ResponseEntity<Void> deleteUserWorkoutById(@PathVariable Integer userId, @PathVariable(value = "workoutInd") Integer workoutInd) throws Exception {
+@DeleteMapping("/users/{userId}/workouts/{workoutId}")
+public ResponseEntity<Void> deleteUserWorkoutById(@PathVariable Integer userId, @PathVariable(value = "workoutId") Integer workoutId) throws Exception {
         Optional<User> user = userService.retrieveUserById(userId);
         if(user.isEmpty()) {
             throw new Exception("User: " + userId + " not found");
         }
 
-        Workout workoutToDelete = user.get().getWorkouts().get(workoutInd);
-        workoutService.deleteWorkoutById(workoutToDelete.getId());
+        Optional<Workout> workoutToDelete = workoutService.retrieveWorkoutById(workoutId);
+        if(workoutToDelete.isEmpty()) {
+            throw new Exception("Workout: " + workoutId + " not found");
+        }
+        workoutService.deleteWorkoutById(workoutToDelete.get().getId());
         return ResponseEntity.noContent().build();
 }
 
     @Modifying
-    @PutMapping("/users/{userId}/workouts/{workoutInd}")
-    public Workout updateUserWorkoutById(@PathVariable Integer userId, @PathVariable Integer workoutInd,
+    @PutMapping("/users/{userId}/workouts/{workoutId}")
+    public Workout updateUserWorkoutById(@PathVariable Integer userId, @PathVariable Integer workoutId,
                                          @RequestBody Workout workout) throws ServerException {
         Optional<User> user = userService.retrieveUserById(userId);
         if(user.isEmpty()) {
             throw new ServerException("User " + userId +  " not found!");
         }
         // get workout based
-        Workout updatedWorkout = user.get().getWorkouts().get(workoutInd);
-        if(updatedWorkout == null) {
+        Optional<Workout> updatedWorkout = workoutService.retrieveWorkoutById(workoutId);
+        if(updatedWorkout.isEmpty()) {
             throw new ServerException("Workout not found!");
         }
         if(workout.getDate() != null) {
-            updatedWorkout.setDate(workout.getDate());
+            updatedWorkout.get().setDate(workout.getDate());
         }
 
         if(workout.getName() != null) {
-            updatedWorkout.setName(workout.getName());
+            updatedWorkout.get().setName(workout.getName());
         }
 
 
-        workoutService.saveWorkout(updatedWorkout);
+        workoutService.saveWorkout(updatedWorkout.get());
 
-        return updatedWorkout;
+        return updatedWorkout.get();
     }
 
     // USER WORKOUT EXERCISE RELATED METHODS
 
-    @PostMapping("/users/{userId}/workouts/{workoutInd}/exercises")
+    @PostMapping("/users/{userId}/workouts/{workoutId}/exercises")
     public ResponseEntity<Exercise> addExerciseToUserWorkout(@PathVariable Integer userId,
-                                                             @PathVariable Integer workoutInd,
+                                                             @PathVariable Integer workoutId,
                                                              @RequestBody Exercise exercise,
                                                              HttpServletRequest request) throws ServerException {
         Optional<User> user = getUserById(userId);
@@ -194,13 +197,13 @@ public ResponseEntity<Void> deleteUserWorkoutById(@PathVariable Integer userId, 
             throw new ServerException("User: " + userId + " does not exist.");
         }
 
-        Workout updatedWorkout = user.get().getWorkouts().get(workoutInd);
-        if(updatedWorkout == null){
-            throw new ServerException("Workout: " + updatedWorkout.getName() + " does not exist.");
+        Optional<Workout> updatedWorkout = workoutService.retrieveWorkoutById(workoutId);
+        if(updatedWorkout.isEmpty()){
+            throw new ServerException("Workout: " + updatedWorkout.get().getName() + " does not exist.");
         }
-        exercise.setWorkouts(updatedWorkout);
-        updatedWorkout.getExercises().add(exercise);
-        workoutService.saveWorkout(updatedWorkout);
+        exercise.setWorkouts(updatedWorkout.get());
+        updatedWorkout.get().getExercises().add(exercise);
+        workoutService.saveWorkout(updatedWorkout.get());
 
         URI location = ServletUriComponentsBuilder.fromRequestUri(request)
                 .path("/{id}")
@@ -211,19 +214,19 @@ public ResponseEntity<Void> deleteUserWorkoutById(@PathVariable Integer userId, 
     }
 
     @Transactional
-    @DeleteMapping("/users/{userId}/workouts/{workoutInd}/exercises/{exerciseId}")
-    public ResponseEntity<Void> deleteExerciseFromUserWorkout(@PathVariable Integer userId,
-                                                              @PathVariable Integer workoutInd,
-                                                              @PathVariable("exerciseId") Integer exerciseId)
+    @DeleteMapping("/users/{userId}/workouts/{workoutInd}/exercises/{exerciseInd}")
+    public ResponseEntity<Void> deleteExerciseFromUserWorkout(@PathVariable("userId") Integer userId,
+                                                              @PathVariable("workoutInd") Integer workoutInd,
+                                                              @PathVariable("exerciseInd") Integer exerciseInd)
     throws Exception {
         Optional<User> user = userService.retrieveUserById(userId);
         if(user.isEmpty()) {
             throw new Exception("User: " + userId + " not found");
         }
+        Exercise exerciseToDelete = user.get().getWorkouts().get(workoutInd).getExercises().get(exerciseInd);
 
-
-        System.out.println(exerciseId);
-        exerciseService.deleteExerciseById(exerciseId);
+        System.out.println(exerciseInd);
+        exerciseService.deleteExerciseById(exerciseToDelete.getId());
         return ResponseEntity.noContent().build();
     }
 
