@@ -27,10 +27,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-@RestController
+@Controller
 public class UserController {
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
     private WorkoutService workoutService;
     @Autowired
@@ -95,24 +95,45 @@ public class UserController {
         }
         return user.get().getWorkouts();
     }
+    @GetMapping("/users/{userId}/workouts/{workoutId}")
+    public String getUserWorkoutById(@PathVariable Integer userId, @PathVariable Integer workoutId, Model model)
+            throws ServerException {
 
-    @GetMapping("users/{id}/workouts/{workoutId}")
-    public Workout getUserWorkoutById(@PathVariable Integer id,
-                                      @PathVariable Integer workoutId)
-            throws Exception {
-        Optional<User> user = userService.retrieveUserById(id);
+        Optional<User> user = userService.retrieveUserById(userId);
+
         if(user.isEmpty()) {
-            throw new Exception("id: " + id);
+            throw new ServerException("User: " + userId + " not found");
+        }
+        Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
+        if(userWorkout.isEmpty()) {
+            throw new ServerException("Workout: " + workoutId + " not found");
         }
 
-        Optional<Workout> workout = workoutService.retrieveWorkoutById(workoutId);
-        if(workout.isEmpty()) {
-            throw new Exception("workoutId: " + workoutId + "not found");
-        }
-
-        return workout.get();
-
+        List<Exercise> exercises = userWorkout.get().getExercises();
+        model.addAttribute(user);
+        model.addAttribute("userWorkout", userWorkout.get());
+        model.addAttribute("exercises", exercises);
+        return "userWorkouts/userWorkout";
     }
+
+
+//    @GetMapping("users/{id}/workouts/{workoutId}")
+//    public Workout getUserWorkoutById(@PathVariable Integer id,
+//                                      @PathVariable Integer workoutId)
+//            throws Exception {
+//        Optional<User> user = userService.retrieveUserById(id);
+//        if(user.isEmpty()) {
+//            throw new Exception("id: " + id);
+//        }
+//
+//        Optional<Workout> workout = workoutService.retrieveWorkoutById(workoutId);
+//        if(workout.isEmpty()) {
+//            throw new Exception("workoutId: " + workoutId + "not found");
+//        }
+//
+//        return workout.get();
+//
+//    }
 
 //    @GetMapping("/users/{id}/thWorkouts")
 //    public String getUserThWorkouts(@PathVariable int id, Model model) throws Exception {
