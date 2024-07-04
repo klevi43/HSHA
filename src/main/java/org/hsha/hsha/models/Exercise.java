@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 
 @Entity
@@ -20,22 +21,22 @@ public class Exercise implements Serializable {
     private String name;
 
     private String bodyPart; // body part(s) worked
-    private Integer weightInKg;
-    private Integer reps;
+
     @JsonIgnore
     @ManyToOne
     private Workout workout;
 
+    @OneToMany(mappedBy = "exercise")
+    private List<ExSet> exSets;
    //
 
     // CONSTRUCTORS
-    public Exercise(Integer id, String name, String bodyPart, Integer weightInKg, Integer reps, Workout workout) {
+    public Exercise(Integer id, String name, String bodyPart, Workout workout, List<ExSet> exSets) {
         this.id = id;
         this.name = name;
         this.bodyPart = bodyPart;
-        this.weightInKg = weightInKg;
-        this.reps = reps;
         this.workout = workout;
+        this.exSets = exSets;
     }
 
     public Exercise() {
@@ -68,27 +69,19 @@ public class Exercise implements Serializable {
         this.bodyPart = bodyPart;
     }
 
-    public Integer getWeightInKg() {
-        return weightInKg;
-    }
-
-    public void setWeightInKg(Integer weightInKg) {
-        this.weightInKg = weightInKg;
-    }
-
-    public Integer getReps() {
-        return reps;
-    }
-
-    public void setReps(Integer reps) {
-        this.reps = reps;
-    }
-
     public Workout getWorkout() {
         return workout;
     }
 
-    public void setWorkouts(Workout workout) {
+    public void setWorkout(Workout workout) {
         this.workout = workout;
+    }
+
+    public List<ExSet> getExSets() {
+        return exSets;
+    }
+
+    public void setExSets(List<ExSet> exSets) {
+        this.exSets = exSets;
     }
 }
