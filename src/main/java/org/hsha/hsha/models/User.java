@@ -20,6 +20,7 @@ public class User {
     @JsonIgnore
     private List<Workout> workouts;
 
+
     // CONSTRUCTORS
     public User(Integer id, String username, String password, List<Workout> workouts) {
         this.id = id;

@@ -18,6 +18,9 @@ public class ExerciseService {
         return exerciseRepository.findAll();
     }
     //
+    public List<Exercise> retrieveAllExercisesByWorkoutId(Integer workoutId) {
+        return exerciseRepository.findAllByWorkout_Id(workoutId);
+    }
     public Optional<Exercise> retrieveExerciseById(Integer exId) {
         return exerciseRepository.findById(exId);
     }

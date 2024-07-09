@@ -1,5 +1,6 @@
 package org.hsha.hsha.Repository;
 
+import org.hsha.hsha.models.Exercise;
 import org.hsha.hsha.models.Workout;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,4 +11,6 @@ public interface WorkoutRepository extends JpaRepository<Workout, Integer> {
 //
     Optional<Workout> findWorkoutByName(String name);
     void deleteWorkoutById(int id);
+
+
 }

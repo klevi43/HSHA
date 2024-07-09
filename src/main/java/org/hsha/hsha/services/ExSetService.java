@@ -31,4 +31,12 @@ public class ExSetService {
         exSetRepository.deleteById(exSetId);
     }
 
+    public List<ExSet> retrieveAllExSetsByExerciseId(Integer exerciseId) {
+        return exSetRepository.findAllByExercise_Id(exerciseId);
+    }
+
+    public List<ExSet> retrieveAllExSetsByWorkoutId(Integer workoutId) {
+        return exSetRepository.findAllByWorkout_Id(workoutId);
+    }
 }
+

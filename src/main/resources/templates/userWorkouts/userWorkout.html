@@ -10,15 +10,24 @@
         <div>
             <h1 th:text="${userWorkout.name}"></h1>
         </div>
-        <div th:each="exercises: ${exercises}">
-            <span><h2 th:text="${exercises.name}"></h2></span>
+        <div th:each="workoutExercises: ${workoutExercises}">
+            <span><h2 th:text="${workoutExercises.name}"></h2></span>
+            <div th:each="exerciseExSets: ${exerciseExSets}">
             <table>
                 <thead>
                 <tr>
-                    <td>Test</td>
                 </tr>
                 </thead>
+                <tbody>
+                    <tr>
+                        <td th:if=""
+                        th:text="${exerciseExSets.getReps()}">
+
+                        </td>
+                    </tr>
+                </tbody>
             </table>
+            </div>
         </div>
         <div>
             Footer Section

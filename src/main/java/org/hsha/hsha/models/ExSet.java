@@ -21,11 +21,16 @@ public class ExSet {
     @JsonIgnore
     private Exercise exercise;
 
-    public ExSet(Integer id, Integer weightInKg, Integer reps, Exercise exercise) {
+    @ManyToOne
+    @JsonIgnore
+    private Workout workout;
+
+    public ExSet(Integer id, Integer weightInKg, Integer reps, Exercise exercise, Workout workout) {
         this.id = id;
         this.weightInKg = weightInKg;
         this.reps = reps;
         this.exercise = exercise;
+        this.workout = workout;
     }
     public ExSet() {
 
@@ -62,5 +67,13 @@ public class ExSet {
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    public Workout getWorkout() {
+        return workout;
+    }
+
+    public void setWorkout(Workout workout) {
+        this.workout = workout;
     }
 }

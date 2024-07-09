@@ -32,16 +32,19 @@ public class Workout {
     orphanRemoval = true) // defining the field that owns the workouts
     private List<Exercise> exercises; // exercise performed
 
+    @OneToMany(mappedBy = "workout", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    private List<ExSet> exSets;
 
 //
     // CONSTRUCTORS
-    public Workout(Integer id, String name, LocalDate date, List<Exercise> exercises, User user) {
+    public Workout(Integer id, String name, LocalDate date, List<Exercise> exercises, User user,
+                   List<ExSet> exSets) {
         this.id = id;
         this.name = name;
         this.user = user;
         this.date = date;
         this.exercises = exercises;
-
+        this.exSets = exSets;
     }
 //
     public Workout() {
@@ -88,6 +91,12 @@ public class Workout {
         this.user = user;
     }
 
+    public List<ExSet> getExSets() {
+        return exSets;
+    }
 
+    public void setExSets(List<ExSet> exSets) {
+        this.exSets = exSets;
+    }
 }
 
