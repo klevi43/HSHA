@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.rmi.ServerException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 //
@@ -142,7 +143,7 @@ public class WorkoutController {
         List<Exercise> workoutExercises = exerciseService.retrieveAllExercisesByWorkoutId(workoutId);
         // the problem is here on 144
         List<ExSet> exerciseExSets = exSetService.retrieveAllExSetsByWorkoutId(workoutId);
-            System.out.println(exerciseExSets.get(0).toString());
+
         model.addAttribute(user);
         model.addAttribute("userWorkout", userWorkout.get());
         model.addAttribute("workoutExercises", workoutExercises);

@@ -10,19 +10,24 @@
         <div>
             <h1 th:text="${userWorkout.name}"></h1>
         </div>
-        <div th:each="workoutExercises: ${workoutExercises}">
-            <span><h2 th:text="${workoutExercises.name}"></h2></span>
-            <div th:each="exerciseExSets: ${exerciseExSets}">
-            <table>
+        <div th:each="workoutExercise: ${workoutExercises}">
+            <span><h2 th:text="${workoutExercise.name}"></h2></span>
+
+            <div >
+            <table border="1px solid black" th:each="exerciseExSet: ${exerciseExSets}">
                 <thead>
                 <tr>
+                    <td th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}">Weight</td>
+                    <td th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}">Reps</td>
                 </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td th:if=""
-                        th:text="${exerciseExSets.getReps()}">
-
+                        <td th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}"
+                            th:text="${exerciseExSet.getWeightInKg()}">
+                        </td>
+                        <td th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}"
+                            th:text="${exerciseExSet.getReps()}">
                         </td>
                     </tr>
                 </tbody>
