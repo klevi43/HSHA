@@ -3,10 +3,7 @@ package org.hsha.hsha.controllers;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
-import org.hsha.hsha.models.ExSet;
-import org.hsha.hsha.models.Exercise;
-import org.hsha.hsha.models.User;
-import org.hsha.hsha.models.Workout;
+import org.hsha.hsha.models.*;
 import org.hsha.hsha.services.ExSetService;
 import org.hsha.hsha.services.ExerciseService;
 import org.hsha.hsha.services.UserService;
@@ -28,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@RestController
+@Controller
 public class UserController {
     @Autowired
     private UserService userService;
@@ -54,10 +51,18 @@ public class UserController {
         }
 
     }
-    @GetMapping("/users")
-    public List<User> getAllUsers() {
-        return userService.retrieveAllUsers();
+
+    @GetMapping("/users/new")
+    public String userForm(Model model) {
+        model.addAttribute("userForm", new UserForm());
+        return "user/userForm";
+
     }
+//    @GetMapping("/users")
+//    public List<User> getAllUsers() {
+//
+//        return userService.retrieveAllUsers();
+//    }
 
     @GetMapping("/users/{id}")
     public Optional<User> getUserById(@PathVariable(value = "id") Integer id) {
