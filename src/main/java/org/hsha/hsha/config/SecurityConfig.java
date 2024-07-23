@@ -40,15 +40,4 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-
-
-    @Override
-    public void init(SecurityBuilder builder) throws Exception {
-
-    }
-
-    @Override
-    public void configure(SecurityBuilder builder) throws Exception {
-
-    }
 }
