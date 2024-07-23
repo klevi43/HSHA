@@ -14,4 +14,9 @@ public class LoginController {
     public String getHomePage() {
         return "homepage/homepage";
     }
+
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "login/login";
+    }
 }
