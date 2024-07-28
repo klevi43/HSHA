@@ -15,8 +15,8 @@ public class LoginController {
         return "homepage/homepage";
     }
 
-    @GetMapping("/login")
-    public String getLoginPage() {
-        return "login/login";
-    }
+//    @GetMapping("/login")
+//    public String getLoginPage() {
+//        return "login/login";
+//    }
 }

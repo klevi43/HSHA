@@ -17,7 +17,7 @@
         </div>
 
         <div class="d-flex p-2 justify-content-between w-lg p-3">
-            <h1 class="display-2 d-inline fw-bold" th:text="${userWorkout.name}"></h1>
+            <h1 class="display-2 d-inline fw-semibold" th:text="${userWorkout.name}"></h1>
 
             <h1 class="display-2 d-inline fw-normal text-end" th:text="${userWorkout.date}"></h1>
 
@@ -26,36 +26,34 @@
 
 
         <div class="w-auto ps-5 pe-5" th:each="workoutExercise: ${workoutExercises}">
-            <span><h2 class="display-5 fw-semibold" th:text="${workoutExercise.name}"></h2></span>
+            <span><h2 class="display-5"th:text="${workoutExercise.name}"></h2></span>
 
             <div>
-            <table class="table table-dark border border-secondary ">
+            <table class="table table-dark" border="1" th:each="exerciseExSet: ${exerciseExSets}">
 
                 <thead>
-                <tr >
-                    <td  class="display-6 text-center">Weight</td>
-                    <td class="display-6 text-center">Reps</td>
-                    <td></td>
-                    <td></td>
+                <tr th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}">
+                    <td class="display-6">Weight</td>
+                    <td class="display-6">Reps</td>
                 </tr>
                 </thead>
-                <tbody th:each="exerciseExSet: ${exerciseExSets}">
-                    <tr  class="border border-secondary" th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}">
-                        <td class="display-6 text-center" th:text="${exerciseExSet.getWeightInKg()}">
+                <tbody>
+                    <tr th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}">
+                        <td class="display-6" th:text="${exerciseExSet.getWeightInKg()}">
                         </td>
-                        <td  class="display-6 text-center border border-secondary" th:text="${exerciseExSet.getReps()}">
+                        <td  class="display-6" th:text="${exerciseExSet.getReps()}">
                         </td>
-                        <td class="text-center">
-                            <a class="display-6  text-decoration-none text-light link-offset-3-hover link-warning " href="#">Update</a>
+                        <td>
+                            <button>Update</button>
                         </td>
-                        <td class="text-center">
-                            <a class="display-6 text-decoration-none text-light link-offset-3-hover link-warning" href="#">Delete</a>
+                        <td>
+                            <button>Delete</button>
                         </td>
                     </tr>
                 </tbody>
 
             </table>
-                <a href="#" class="btn btn-warning fw-bold">Add Set</a>
+                <button>Add Set</button>
             </div>
         </div>
         <button>Add Exercise</button>
