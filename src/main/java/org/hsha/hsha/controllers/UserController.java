@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -37,31 +39,51 @@ public class UserController {
     @Autowired
     private ExSetService exSetService;
 
+    @GetMapping("/users")
+    public String showAllUsersPage(Model model) {
+        List<User> users = userService.retrieveAllUsers();
+        model.addAttribute("users", users);
+        return "user/allUsers";
+    }
+    @GetMapping("/users/signup")
+    public String showSignUpPage(Model model) {
+        UserDto user = new UserDto();
+        model.addAttribute("userDto", user);
+        return "user/signUp";
 
+    }
 
 
     // USER RELATED METHODS
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user, HttpServletRequest request) throws ServerException{
-        userService.saveUser(user);
-        if (user != null) {
-            URI location = ServletUriComponentsBuilder.fromRequestUri(request)
-                    .path("/{id}")
-                    .buildAndExpand(user.getId())
-                    .toUri();
-            return ResponseEntity.created(location).body(user);
-        } else {
-            throw new ServerException("Error in creating user");
+    @PostMapping("/users/signup")
+    public String createUser(@ModelAttribute UserDto userDto, BindingResult result) {
+
+        if(userDto.getUsername().isEmpty()) {
+            result.addError(new FieldError("user", "username", "Please enter a username"));
         }
 
+        if(userDto.getPassword().isEmpty()) {
+            result.addError(new FieldError("user", "password", "Please enter a password"));
+        }
+
+        if(userDto.getEmail().isEmpty()) {
+            result.addError(new FieldError("user", "email", "Please enter an email"));
+        }
+
+        if(result.hasErrors()) {
+            return "user/signUp";
+        }
+        User newUser = new User();
+        newUser.setUsername(userDto.getUsername());
+        newUser.setPassword(userDto.getPassword());
+        newUser.setEmail(userDto.getEmail());
+        userService.saveUser(newUser);
+        return "redirect:/users";
+
+
     }
 
-    @GetMapping("/users/new")
-    public String userForm(Model model) {
-        model.addAttribute("userForm", new UserForm());
-        return "user/userForm";
 
-    }
 //    @GetMapping("/users")
 //    public List<User> getAllUsers() {
 //

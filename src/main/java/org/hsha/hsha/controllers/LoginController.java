@@ -2,6 +2,7 @@ package org.hsha.hsha.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
@@ -12,7 +13,17 @@ public class LoginController {
     }
     @GetMapping("/")
     public String getHomePage() {
-        return "homepage/homepage";
+        return "homepage/index";
+    }
+
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "login/login";
+    }
+
+    @PostMapping("/login")
+    public String login() {
+        return "redirect:/";
     }
 
 //    @GetMapping("/login")

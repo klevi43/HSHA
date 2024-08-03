@@ -7,27 +7,30 @@
 
 </head>
 <body>
-<header th:insert="fragments/header :: header"></header>
-    <div class="container-xxl bg-dark">
+<header th:insert="~{fragments/header :: header}"></header>
+<div class="bg-dark">
+    <div class="container-xxl">
         <div class="row justify-content-center align-items-center">
 
-           <div class="col-md-5 text-center text-md-start">
-               <h1>
-                   <span class="display-2 text-light">Your Workout</span>
-                   <span class="display-2 text-light">Redefined</span>
-               </h1>
+            <div class="col-md-5 text-center text-md-start">
+                <h1>
+                    <span class="display-2 text-light">Your Workout</span>
+                    <span class="display-2 text-light">Redefined</span>
+                </h1>
 
 
-               <p class="text-light">Tracking your progress has never been easier.</p>
-           </div>
+                <p class="text-light">Tracking your progress has never been easier.</p>
+            </div>
             <div class="col-md-5 text-center d-none d-md-block">
                 <img class="img-fluid rounded" src="../../images/deadlift.jpg" alt="person doing a deadlift">
             </div>
         </div>
 
-        </div>
-
     </div>
+
+</div>
+
+</div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
