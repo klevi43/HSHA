@@ -1,7 +1,5 @@
 package org.hsha.hsha.controllers;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import org.hsha.hsha.models.*;
 import org.hsha.hsha.services.ExSetService;
@@ -10,17 +8,12 @@ import org.hsha.hsha.services.UserService;
 import org.hsha.hsha.services.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 import java.rmi.ServerException;
 
@@ -39,50 +32,81 @@ public class UserController {
     @Autowired
     private ExSetService exSetService;
 
+
+
     @GetMapping("/users")
     public String showAllUsersPage(Model model) {
         List<User> users = userService.retrieveAllUsers();
         model.addAttribute("users", users);
         return "user/allUsers";
     }
-    @GetMapping("/users/signup")
+    @GetMapping("/users/register")
     public String showSignUpPage(Model model) {
-        UserDto user = new UserDto();
-        model.addAttribute("userDto", user);
-        return "user/signUp";
+        RegisterDto registerDto = new RegisterDto();
+        model.addAttribute("registerDto", registerDto);
+        model.addAttribute("success", false);
+        return "user/register";
 
     }
 
 
     // USER RELATED METHODS
-    @PostMapping("/users/signup")
-    public String createUser(@ModelAttribute UserDto userDto, BindingResult result) {
+    @PostMapping("/users/register")
+    public String createUser(Model model, @ModelAttribute RegisterDto registerDto, BindingResult result) {
+        // check that the fields on the register form are valid
+        if(!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
+            result.addError(
+                    new FieldError("registerDto", "confirmPassword",
+                            "Password and Confirm Password do not match")
+            );
 
-        if(userDto.getUsername().isEmpty()) {
-            result.addError(new FieldError("user", "username", "Please enter a username"));
+
         }
-
-        if(userDto.getPassword().isEmpty()) {
-            result.addError(new FieldError("user", "password", "Please enter a password"));
-        }
-
-        if(userDto.getEmail().isEmpty()) {
-            result.addError(new FieldError("user", "email", "Please enter an email"));
+        User searchedUser = userService.retrieveUserByEmail(registerDto.getEmail());
+        if (searchedUser != null) {
+            result.addError(
+                    new FieldError("registerDto", "email",
+                            "Email address is already used")
+            );
         }
 
         if(result.hasErrors()) {
-            return "user/signUp";
+            return "user/register";
         }
-        User newUser = new User();
-        newUser.setUsername(userDto.getUsername());
-        newUser.setPassword(userDto.getPassword());
-        newUser.setEmail(userDto.getEmail());
-        userService.saveUser(newUser);
+        try {
+            // try to create a new user
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            User newUser = new User();
+            newUser.setFirstName(registerDto.getFirstName());
+            newUser.setLastName(registerDto.getLastName());
+            newUser.setEmail(registerDto.getEmail());
+            newUser.setRole("USER");
+            newUser.setPassword(passwordEncoder.encode(registerDto.getPassword()));
+
+            // clear the register form
+            model.addAttribute("registerDto", new RegisterDto());
+
+            // display success message
+            model.addAttribute("success", true);
+
+            // save user to DB
+            userService.saveUser(newUser);
+        }
+        catch(Exception ex) {
+            result.addError(
+                    new FieldError("registerDto", "firstName",
+                            ex.getMessage())
+            );
+        }
         return "redirect:/users";
 
 
     }
 
+    @GetMapping("/login")
+    public String getLoginPage() {
+        return "login/login";
+    }
 
 //    @GetMapping("/users")
 //    public List<User> getAllUsers() {
@@ -101,21 +125,21 @@ public class UserController {
         userService.deleteUserById(id);
     }
 
-    @Modifying
-    @PutMapping("/users/{id}")
-    public User updateUserById(@PathVariable int id, @RequestBody User user) throws ServerException {
-        Optional<User> updatedUser = userService.retrieveUserById(id);
-        if(updatedUser.isEmpty()) {
-            throw new ServerException("User not found!");
-        }
-        if (user.getUsername() != null)
-            updatedUser.get().setUsername(user.getUsername());
-        if (user.getPassword() != null)
-            updatedUser.get().setPassword(user.getPassword());
-
-        userService.saveUser(updatedUser.get());
-        return user;
-    }
+//    @Modifying
+//    @PutMapping("/users/{id}")
+//    public User updateUserById(@PathVariable int id, @RequestBody User user) throws ServerException {
+//        Optional<User> updatedUser = userService.retrieveUserById(id);
+//        if(updatedUser.isEmpty()) {
+//            throw new ServerException("User not found!");
+//        }
+//        if (user.getUsername() != null)
+//            updatedUser.get().setUsername(user.getUsername());
+//        if (user.getPassword() != null)
+//            updatedUser.get().setPassword(user.getPassword());
+//
+//        userService.saveUser(updatedUser.get());
+//        return user;
+//    }
 
 
 

@@ -3,7 +3,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hsha.hsha.constants.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -18,14 +17,15 @@ public class User {
     @Id // tells spring that this is the primary key
     @GeneratedValue
     private Integer id;
-    private String username;
     private String password;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    private String firstName;
+    private String lastName;
+
+    private String role;
 
     @OneToMany(mappedBy = "user", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY) // defining the field that owns the workouts
     @JsonIgnore
