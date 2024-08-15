@@ -13,7 +13,7 @@
             <div class="display-4">
                 <span class="display-4" th:text="${user.getFirstName()}"></span><span class="display-4">'s Workouts</span>
             </div>
-            <div th:if="${workouts} == null">
+            <div th:if="${workouts.isEmpty()}" class="">
                 <p>
                     Looks like you haven't added any workouts
                     Let's get started.

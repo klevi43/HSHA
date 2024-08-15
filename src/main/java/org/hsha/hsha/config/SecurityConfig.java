@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hsha.hsha.components.CustomAuthenticationSuccessHandler;
+import org.hsha.hsha.components.UserSecurity;
 import org.hsha.hsha.models.User;
 import org.hsha.hsha.services.UserService;
 import org.springframework.context.annotation.Bean;
@@ -43,14 +44,16 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, UserSecurity userSecurity) throws Exception {
 
 
         // define which pages are visible to non-users
         http.authorizeHttpRequests(configurer -> configurer.requestMatchers("/").permitAll()
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/users/register").permitAll()
-                .anyRequest().authenticated());
+                        .requestMatchers("/users/{userId}/**").access(userSecurity)
+                .anyRequest().authenticated()
+                );
 
         // set up form for login
         http.formLogin(form -> form.loginPage("/login")
