@@ -63,7 +63,7 @@ public class WorkoutController {
     }
 
             @GetMapping("/users/{userId}/workouts/{workoutId}")
-    public String getUserWorkoutById(@PathVariable Integer userId, @PathVariable Integer workoutId, Model model)
+    public String showSingleWorkoutPage(@PathVariable int userId, @PathVariable int workoutId, Model model)
             throws ServerException {
 
         Optional<User> user = userService.retrieveUserById(userId);
@@ -80,7 +80,7 @@ public class WorkoutController {
 
         List<ExSet> exerciseExSets = exSetService.retrieveAllExSetsByWorkoutId(workoutId);
 
-        model.addAttribute(user);
+        model.addAttribute("user", user);
         model.addAttribute("userWorkout", userWorkout.get());
         model.addAttribute("workoutExercises", workoutExercises);
         model.addAttribute("exerciseExSets", exerciseExSets);
