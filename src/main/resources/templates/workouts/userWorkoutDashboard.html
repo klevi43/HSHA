@@ -18,7 +18,7 @@
                     Looks like you haven't added any workouts
                     Let's get started.
                 </p>
-                <a class="btn btn-warning rounded" href="#">Add Workout</a>
+                <a class="btn btn-warning rounded" th:href="'/users/' + ${user.getId()} + '/workouts/add'">Add Workout</a>
             </div>
             <div class="row">
                 <div class="col-sm-6 border" th:each="workout : ${workouts}">

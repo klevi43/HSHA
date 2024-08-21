@@ -1,9 +1,6 @@
 package org.hsha.hsha.controllers;
 
-import org.hsha.hsha.models.ExSet;
-import org.hsha.hsha.models.Exercise;
-import org.hsha.hsha.models.User;
-import org.hsha.hsha.models.Workout;
+import org.hsha.hsha.models.*;
 import org.hsha.hsha.services.ExSetService;
 import org.hsha.hsha.services.ExerciseService;
 import org.hsha.hsha.services.UserService;
@@ -11,8 +8,12 @@ import org.hsha.hsha.services.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.rmi.ServerException;
 import java.util.*;
@@ -76,7 +77,7 @@ public class WorkoutController {
         }
 
         List<Exercise> workoutExercises = exerciseService.retrieveAllExercisesByWorkoutId(workoutId);
-        // the problem is here on 144
+
         List<ExSet> exerciseExSets = exSetService.retrieveAllExSetsByWorkoutId(workoutId);
 
         model.addAttribute(user);
@@ -84,5 +85,45 @@ public class WorkoutController {
         model.addAttribute("workoutExercises", workoutExercises);
         model.addAttribute("exerciseExSets", exerciseExSets);
         return "workouts/userWorkout";
+    }
+
+    @GetMapping("/users/{userId}/workouts/add")
+    public String showAddWorkoutsPage(@PathVariable int userId, Model model ) throws Exception {
+        // check if user is valid
+        Optional<User> user = userService.retrieveUserById(userId);
+
+        if(user.isEmpty()) {
+            throw new Exception("User Not Found");
+        }
+
+        WorkoutDto workoutDto = new WorkoutDto();
+        model.addAttribute("user", user.get());
+        model.addAttribute("workoutDto", workoutDto);
+        model.addAttribute("success", false);
+        return "workouts/addWorkout";
+
+
+    }
+
+    @PostMapping("/users/{userId}/workouts/add")
+    public String addWorkout(@PathVariable int userId, @ModelAttribute WorkoutDto workoutDto, BindingResult result) throws ServerException {
+        Optional<User> user = userService.retrieveUserById(userId);
+
+        if(user.isEmpty()) {
+            throw new ServerException("User: " + userId + " not found");
+        }
+        try {
+            Workout newWorkout = new Workout();
+            newWorkout.setName(workoutDto.getName());
+            newWorkout.setDate(workoutDto.getDate());
+            newWorkout.setUser(user.get());
+            workoutService.saveWorkout(newWorkout);
+        }
+        catch (Exception e) {
+            result.addError(new FieldError("workoutDto",
+                    "name", e.getMessage()));
+        }
+
+        return "redirect:/users/{userId}/workouts";
     }
 }

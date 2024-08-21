@@ -25,6 +25,14 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    public int retrieveUserIdByEmail(String email) throws Exception {
+        User searchedUser = userRepository.findByEmail(email);
+        if(searchedUser == null) {
+            throw new Exception("User does not exist");
+        }
+        return searchedUser.getId();
+    }
+
     public List<User> retrieveAllUsers() {
         return userRepository.findAll();
     }

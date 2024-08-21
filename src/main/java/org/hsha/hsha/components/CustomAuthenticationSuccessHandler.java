@@ -38,7 +38,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         else if (authentication.getAuthorities().stream().anyMatch(user -> user.getAuthority().equals("ROLE_USER"))) {
             User user = userService.retrieveUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
             redirectURL += "/users/" + user.getId().toString() + "/workouts";
-            System.out.println(redirectURL);
         }
         response.sendRedirect(redirectURL);
     }
