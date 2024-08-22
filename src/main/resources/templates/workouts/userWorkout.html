@@ -38,21 +38,19 @@
             <span><h2 class="display-5 fw-semibold" th:text="${workoutExercise.name}"></h2></span>
 
             <div>
-                <div class="display-6">
-                    <p>No sets added yet.</p>
-                </div>
+
 
             <table th:if="${!exerciseExSets.isEmpty()}" class="table table-dark border border-secondary ">
 
                 <thead>
                 <tr >
-                    <td  class="display-6 text-center">Weight</td>
-                    <td class="display-6 text-center">Reps</td>
-                    <td></td>
-                    <td></td>
+                    <td class="display-6 text-center col-6">Weight</td>
+                    <td class="display-6 text-center col-6">Reps</td>
+
                 </tr>
                 </thead>
                 <tbody th:each="exerciseExSet: ${exerciseExSets}">
+
                     <tr  class="border border-secondary" th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}">
                         <td class="display-6 text-center" th:text="${exerciseExSet.getWeightInKg()}">
                         </td>
@@ -62,10 +60,20 @@
                             <a class="display-6  text-decoration-none text-light link-offset-3-hover link-warning " href="#">Update</a>
                         </td>
                         <td class="text-center">
-                            <a class="display-6 text-decoration-none text-light link-offset-3-hover link-warning" href="#">Delete</a>
+                            <a class="display-6 text-decoration-none text-light link-offset-3-hover link-warning"
+                               th:href="'/users/' + ${user.get().id} + '/workouts/' + ${userWorkout.id} + '/exercises/' + ${workoutExercise.id} + '/exSet/' + ${exerciseExSet.id} + '/delete'"
+                            >Delete</a>
                         </td>
                     </tr>
+                    <tr th:if="${workoutExercise.getExSets().isEmpty()}" class="display-6">
+                        <td colspan="6" class="text-center">
+                        <p>No sets added yet.</p>
+
+                        </td>
+                    </tr>
+
                 </tbody>
+
 
             </table>
                 <a th:href="'/users/' + ${user.get().id} + '/workouts/' +
