@@ -27,7 +27,7 @@ public class ExSetService {
         return exSetRepository.save(exSet);
     }
 
-    public void deleteExerciseById(Integer exSetId) {
+    public void deleteExSetById(Integer exSetId) {
         exSetRepository.deleteById(exSetId);
     }
 

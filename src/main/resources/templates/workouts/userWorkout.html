@@ -44,8 +44,10 @@
 
                 <thead>
                 <tr >
-                    <td class="display-6 text-center col-6">Weight</td>
-                    <td class="display-6 text-center col-6">Reps</td>
+                    <th class="display-6 text-center col-6">Weight</th>
+                    <th class="display-6 text-center col-6">Reps</th>
+                    <th></th>
+                    <th></th>
 
                 </tr>
                 </thead>
@@ -61,7 +63,7 @@
                         </td>
                         <td class="text-center">
                             <a class="display-6 text-decoration-none text-light link-offset-3-hover link-warning"
-                               th:href="'/users/' + ${user.get().id} + '/workouts/' + ${userWorkout.id} + '/exercises/' + ${workoutExercise.id} + '/exSet/' + ${exerciseExSet.id} + '/delete'"
+                               th:href="@{'/users/' + ${user.get().id} + '/workouts/' + ${userWorkout.id} + '/exercises/' + ${workoutExercise.id} + '/exSet/' + ${exerciseExSet.id} + '/delete'}"
                             >Delete</a>
                         </td>
                     </tr>
