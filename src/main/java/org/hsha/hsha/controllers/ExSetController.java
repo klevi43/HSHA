@@ -92,38 +92,6 @@ public class ExSetController {
             return "redirect:/users/{userId}/workouts/{workoutId}";
         }
 
-//        @GetMapping("/users/{userId}/workouts/{workoutId}/exercises/{exerciseId}/exSet/{exSetId}/delete")
-//        public String showConfirmDeleteExSetPage(@PathVariable int userId, @PathVariable int workoutId,
-//                                                 @PathVariable int exerciseId, @PathVariable int exSetId,
-//                                                 Model model) throws ServerException {
-//            Optional<User> user = userService.retrieveUserById(userId);
-//            if (user.isEmpty()) {
-//                throw new ServerException("User: " + userId + " not found");
-//            }
-//            Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
-//            if (userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals(user.get().getId()))) {
-//                throw new ServerException("Workout: " + workoutId + " not found");
-//
-//            }
-//
-//            Optional<Exercise> workoutExercise = exerciseService.retrieveExerciseById(exerciseId);
-//            if (workoutExercise.isEmpty() || !(workoutExercise.get().getWorkout().getId().equals(userWorkout.get().getId()))) {
-//                throw new ServerException("Exercise: " + exerciseId + " not found");
-//            }
-//
-//            Optional<ExSet> exerciseExSet = exSetService.retrieveExSetById(exSetId);
-//            if(exerciseExSet.isEmpty() || !(exerciseExSet.get().getExercise().getId().equals(workoutExercise.get().getId()))) {
-//                throw new ServerException("Exercise Set: " + exSetId + " not found");
-//            }
-//
-//            model.addAttribute("user", user);
-//            model.addAttribute("userWorkout", userWorkout);
-//            model.addAttribute("workoutExercise", workoutExercise);
-//            model.addAttribute("exerciseExSet", exerciseExSet);
-//
-//            return "exSets/confirmDeleteExSet";
-//        }
-
 
         @GetMapping("/users/{userId}/workouts/{workoutId}/exercises/{exerciseId}/exSet/{exSetId}/delete")
         public String deleteExSet(@PathVariable int userId, @PathVariable int workoutId,
@@ -149,6 +117,75 @@ public class ExSetController {
             }
 
             exSetService.deleteExSetById(exSetId);
+            return "redirect:/users/{userId}/workouts/{workoutId}";
+        }
+
+        @GetMapping("/users/{userId}/workouts/{workoutId}/exercises/{exerciseId}/exSet/{exSetId}/update")
+        public String showUpdateExSetPage(@PathVariable int userId, @PathVariable int workoutId,
+                                          @PathVariable int exerciseId, @PathVariable int exSetId, Model model) throws ServerException {
+            Optional<User> user = userService.retrieveUserById(userId);
+            if (user.isEmpty()) {
+                throw new ServerException("User: " + userId + " not found");
+            }
+            Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
+            if (userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals(user.get().getId()))) {
+                throw new ServerException("Workout: " + workoutId + " not found");
+
+            }
+
+            Optional<Exercise> workoutExercise = exerciseService.retrieveExerciseById(exerciseId);
+            if (workoutExercise.isEmpty() || !(workoutExercise.get().getWorkout().getId().equals(userWorkout.get().getId()))) {
+                throw new ServerException("Exercise: " + exerciseId + " not found");
+            }
+
+            Optional<ExSet> exerciseExSet = exSetService.retrieveExSetById(exSetId);
+            if(exerciseExSet.isEmpty() || !(exerciseExSet.get().getExercise().getId().equals(workoutExercise.get().getId()))) {
+                throw new ServerException("Exercise Set: " + exSetId + " not found");
+            }
+            ExSetDto exSetDto = new ExSetDto();
+            model.addAttribute("user", user);
+            model.addAttribute("userWorkout", userWorkout);
+            model.addAttribute("workoutExercise", workoutExercise);
+            model.addAttribute("exerciseExSet", exerciseExSet);
+            model.addAttribute("exSetDto", exSetDto);
+            return "exSets/updateExSet";
+        }
+
+
+        @PostMapping("/users/{userId}/workouts/{workoutId}/exercises/{exerciseId}/exSet/{exSetId}/update")
+        public String updateExSet(@PathVariable int userId, @PathVariable int workoutId,
+                                  @PathVariable int exerciseId, @PathVariable int exSetId,
+                                  @ModelAttribute ExSetDto exSetDto, BindingResult result) throws ServerException {
+            Optional<User> user = userService.retrieveUserById(userId);
+            if (user.isEmpty()) {
+                throw new ServerException("User: " + userId + " not found");
+            }
+            Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
+            if (userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals(user.get().getId()))) {
+                throw new ServerException("Workout: " + workoutId + " not found");
+
+            }
+
+            Optional<Exercise> workoutExercise = exerciseService.retrieveExerciseById(exerciseId);
+            if (workoutExercise.isEmpty() || !(workoutExercise.get().getWorkout().getId().equals(userWorkout.get().getId()))) {
+                throw new ServerException("Exercise: " + exerciseId + " not found");
+            }
+
+            Optional<ExSet> exerciseExSet = exSetService.retrieveExSetById(exSetId);
+            if(exerciseExSet.isEmpty() || !(exerciseExSet.get().getExercise().getId().equals(workoutExercise.get().getId()))) {
+                throw new ServerException("Exercise Set: " + exSetId + " not found");
+            }
+
+            try {
+                exerciseExSet.get().setReps(exSetDto.getReps());
+                exerciseExSet.get().setWeightInKg(exSetDto.getWeightInKg());
+                exSetService.saveExSet(exerciseExSet.get());
+
+            } catch (Exception e) {
+                result.addError(new FieldError("exerciseDto",
+                        "weightInKg", e.getMessage()));
+            }
+
             return "redirect:/users/{userId}/workouts/{workoutId}";
         }
 }

@@ -59,7 +59,8 @@
                         <td  class="display-6 text-center border border-secondary" th:text="${exerciseExSet.getReps()}">
                         </td>
                         <td class="text-center">
-                            <a class="display-6  text-decoration-none text-light link-offset-3-hover link-warning " href="#">Update</a>
+                            <a class="display-6  text-decoration-none text-light link-offset-3-hover link-warning "
+                               th:href="@{'/users/' + ${user.get().id} + '/workouts/' + ${userWorkout.id} + '/exercises/' + ${workoutExercise.id} + '/exSet/' + ${exerciseExSet.id} + '/update'}">Update</a>
                         </td>
                         <td class="text-center">
                             <a class="display-6 text-decoration-none text-light link-offset-3-hover link-warning"
