@@ -79,11 +79,13 @@ public class WorkoutController {
         List<Exercise> workoutExercises = exerciseService.retrieveAllExercisesByWorkoutId(workoutId);
 
         List<ExSet> exerciseExSets = exSetService.retrieveAllExSetsByWorkoutId(workoutId);
+        ThIterationCounter counter = new ThIterationCounter();
 
         model.addAttribute("user", user);
         model.addAttribute("userWorkout", userWorkout.get());
         model.addAttribute("workoutExercises", workoutExercises);
         model.addAttribute("exerciseExSets", exerciseExSets);
+        model.addAttribute("counter", counter);
         return "workouts/userWorkout";
     }
 

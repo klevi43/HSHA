@@ -51,8 +51,7 @@
 
                 </tr>
                 </thead>
-                <tbody th:each="exerciseExSet: ${exerciseExSets}">
-
+                <tbody th:each="exerciseExSet: ${exerciseExSets}" th:with="count = ${counter.getCount()}">
                     <tr  class="border border-secondary" th:if="${exerciseExSet.getExercise().getId()} == ${workoutExercise.getId()}">
                         <td class="display-6 text-center" th:text="${exerciseExSet.getWeightInKg()}">
                         </td>
@@ -68,8 +67,8 @@
                             >Delete</a>
                         </td>
                     </tr>
-                    <tr th:if="${workoutExercise.getExSets().isEmpty()}" class="display-6">
-                        <td colspan="6" class="text-center">
+                    <tr th:if="${workoutExercise.getExSets().isEmpty()} and ${count} == 0" class="display-6">
+                        <td th:with="count = ${counter.incrementAndGet()}" colspan="6" class="text-center">
                         <p>No sets added yet.</p>
 
                         </td>
