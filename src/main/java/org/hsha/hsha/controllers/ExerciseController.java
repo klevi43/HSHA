@@ -28,8 +28,7 @@ public class ExerciseController {
 
     @Autowired
     private ExerciseService exerciseService;
-    @Autowired
-    private ExerciseRepository exerciseRepository;
+
 
     @GetMapping("users/{userId}/workouts/{workoutId}/exercises/add")
     public String showAddExercisePage(@PathVariable int userId,@PathVariable int workoutId, Model model) throws ServerException {
