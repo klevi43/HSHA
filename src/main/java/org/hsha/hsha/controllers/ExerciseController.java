@@ -124,6 +124,9 @@ public class ExerciseController {
         }
 
         // TODO: understand why sets are not updating
+        // You only need the update if there is a spelling error
+        // It's not working if an exercise already exists.
+        // Am I misunderstanding the issue??
 
         Optional<Exercise> existingExercise = exerciseService.retrieveExerciseByname(exerciseDto.getName());
 
