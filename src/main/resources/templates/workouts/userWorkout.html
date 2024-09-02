@@ -35,7 +35,8 @@
                class="btn btn-warning mx-3">Add Exercise</a>
         </div>
         <div class="w-auto ps-5 pe-5" th:each="workoutExercise: ${workoutExercises}">
-            <span><h2 class="display-5 fw-semibold" th:text="${workoutExercise.name}"></h2></span>
+            <span class="display-5 fw-semibold" th:text="${workoutExercise.name}"></span>
+            <span><a class="btn btn-info" th:href="'/users/' + ${user.get().getId()} + '/workouts/' + ${userWorkout.getId()} + '/exercises/' + ${workoutExercise.getId() + '/update'}">Update</a></span>
 
             <div>
 
