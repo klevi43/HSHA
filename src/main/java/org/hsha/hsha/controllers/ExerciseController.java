@@ -126,7 +126,6 @@ public class ExerciseController {
             workoutExercise.get().setWorkout(userWorkout.get());
             workoutExercise.get().setName(exerciseDto.getName());
             workoutExercise.get().setBodyPart(exerciseDto.getBodyPart());
-            workoutExercise.get().setExSets(null);
             exerciseService.saveExercise(workoutExercise.get());
 
         } catch (Exception e) {
