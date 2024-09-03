@@ -122,29 +122,13 @@ public class ExerciseController {
             throw new ServerException("Exercise: " + exerciseId + " not found");
         }
 
-        // TODO: understand why sets are not updating
-        // You only need the update if there is a spelling error
-        // It's not working if an exercise already exists.
-        // Am I misunderstanding the issue??
-
-        Optional<Exercise> existingExercise = exerciseService.retrieveExerciseByname(exerciseDto.getName());
-
         try {
-            if(existingExercise.isEmpty()) {
-                workoutExercise.get().setWorkout(userWorkout.get());
-                workoutExercise.get().setName(exerciseDto.getName());
-                workoutExercise.get().setBodyPart(exerciseDto.getBodyPart());
-                workoutExercise.get().setExSets(null);
-                exerciseService.saveExercise(workoutExercise.get());
-            }
-            else {
-                workoutExercise.get().setWorkout(existingExercise.get().getWorkout());
-                workoutExercise.get().setId(existingExercise.get().getId());
-                workoutExercise.get().setName(existingExercise.get().getName());
-                workoutExercise.get().setBodyPart(existingExercise.get().getBodyPart());
-                workoutExercise.get().setExSets(existingExercise.get().getExSets());
-                exerciseService.saveExercise(workoutExercise.get());
-            }
+            workoutExercise.get().setWorkout(userWorkout.get());
+            workoutExercise.get().setName(exerciseDto.getName());
+            workoutExercise.get().setBodyPart(exerciseDto.getBodyPart());
+            workoutExercise.get().setExSets(null);
+            exerciseService.saveExercise(workoutExercise.get());
+
         } catch (Exception e) {
             result.addError(new FieldError("exerciseDto",
                     "name", e.getMessage()));
