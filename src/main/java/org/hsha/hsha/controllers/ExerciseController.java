@@ -134,4 +134,9 @@ public class ExerciseController {
         }
         return "redirect:/users/{userId}/workouts/{workoutId}";
     }
+
+    @GetMapping("users/{userId}/workouts/{workoutId}/exercises/{exerciseId}/delete")
+    public String showDeleteExercisePage() {
+        return "exercises/confirmDeleteExercise";
+    }
 }

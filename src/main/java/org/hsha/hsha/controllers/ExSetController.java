@@ -93,7 +93,7 @@ public class ExSetController {
         }
 
 
-        @GetMapping("/users/{userId}/workouts/{workoutId}/exercises/{exerciseId}/exSet/{exSetId}/delete")
+        @RequestMapping("/users/{userId}/workouts/{workoutId}/exercises/{exerciseId}/exSet/{exSetId}/delete")
         public String deleteExSet(@PathVariable int userId, @PathVariable int workoutId,
                                   @PathVariable int exerciseId, @PathVariable int exSetId) throws ServerException {
             Optional<User> user = userService.retrieveUserById(userId);

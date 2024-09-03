@@ -31,7 +31,7 @@ public class Exercise implements Serializable {
     @ManyToOne
     private Workout workout;
 
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
     private List<ExSet> exSets;
    //
 
