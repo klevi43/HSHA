@@ -2,9 +2,12 @@ package org.hsha.hsha.services;
 
 import org.hsha.hsha.Repository.ExerciseRepository;
 import org.hsha.hsha.models.Exercise;
+import org.hsha.hsha.models.Workout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sql.rowset.serial.SerialException;
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,5 +37,17 @@ public class ExerciseService {
 
     public void deleteExerciseById(Integer exId) {
         exerciseRepository.deleteById(exId);
+    }
+
+    public Optional<Exercise> verifyExercise(int exerciseId, Optional<Workout> workout) throws ServerException {
+        return  checkExercise(exerciseId, workout);
+    }
+
+    private Optional<Exercise> checkExercise(int exerciseId, Optional<Workout> workout) throws ServerException {
+        Optional<Exercise> checkedExercise = exerciseRepository.findById(exerciseId);
+        if(checkedExercise.isEmpty() || !(checkedExercise.get().getWorkout().getId().equals(workout.get().getId()))) {
+            throw new ServerException("Exercise: " + exerciseId + " not found");
+        }
+        return checkedExercise;
     }
 }

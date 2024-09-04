@@ -37,7 +37,7 @@
         <div class="w-auto ps-5 pe-5" th:each="workoutExercise: ${workoutExercises}">
             <span class="display-5 fw-semibold" th:text="${workoutExercise.name}"></span>
             <span><a class="btn btn-info" th:href="'/users/' + ${user.get().getId()} + '/workouts/' + ${userWorkout.getId()} + '/exercises/' + ${workoutExercise.getId() + '/update'}">Update</a></span>
-
+            <span><a class="btn btn-info" th:href="'/users/' + ${user.get().getId()} + '/workouts/' + ${userWorkout.getId()} + '/exercises/' + ${workoutExercise.getId() + '/delete'}">Delete</a></span>
             <div>
 
 

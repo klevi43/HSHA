@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+import java.rmi.ServerException;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,6 +74,16 @@ public class UserService implements UserDetailsService {
             return springUser;
         }
         return null;
+    }
+    public Optional<User> verifyUser(int userId) throws ServerException {
+        return checkUser(userId);
+    }
+    private Optional<User> checkUser(int userId) throws ServerException {
+        Optional<User> checkedUser = userRepository.findById(userId);
+        if(checkedUser.isEmpty()) {
+            throw new ServerException("User: " + userId + " not found");
+        }
+        return checkedUser;
     }
 
 
