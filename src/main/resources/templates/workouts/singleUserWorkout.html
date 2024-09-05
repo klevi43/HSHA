@@ -23,6 +23,9 @@
 
 
         </div>
+        <div class="row">
+            <p class="m-4 fs-3">Go back to <a class="text-white fs-3" th:href="'/users/' + ${user.get().id} + '/workouts'">Workouts</a></p>
+        </div>
 
         <div class="mx-4" th:if="${workoutExercises.isEmpty()}">
             <p class="display-6">

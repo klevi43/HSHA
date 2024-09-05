@@ -39,6 +39,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> retrieveUserById(Integer id) {
+
         return userRepository.findById(id);
     }
 
@@ -74,16 +75,6 @@ public class UserService implements UserDetailsService {
             return springUser;
         }
         return null;
-    }
-    public Optional<User> verifyUser(int userId) throws ServerException {
-        return checkUser(userId);
-    }
-    private Optional<User> checkUser(int userId) throws ServerException {
-        Optional<User> checkedUser = userRepository.findById(userId);
-        if(checkedUser.isEmpty()) {
-            throw new ServerException("User: " + userId + " not found");
-        }
-        return checkedUser;
     }
 
 

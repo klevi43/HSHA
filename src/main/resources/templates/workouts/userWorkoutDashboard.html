@@ -25,8 +25,10 @@
             </div>
             <div class="row">
                 <div class="col-sm-6 border mx-3" th:each="workout : ${workouts}">
-                    <a th:href="@{'/users/' + ${user.getId()} + '/workouts/' + ${workout.getValue().getId()}}" class="d-block text-white fs-1 m-2" th:text="${workout.getKey()}"></a>
-                    <span> <p class="d-inline fs-3">Last date completed: </p><p class="d-inline fs-3" th:text="${workout.getValue().getDate()}"></p></span>
+                    <a th:href="@{'/users/' + ${user.getId()} + '/workouts/' + ${workout.getValue().getId()}}" class="text-white fs-1 m-2" th:text="${workout.getKey()}"></a>
+                    <a th:href="@{'/users/' + ${user.getId()} + '/workouts/' + ${workout.getValue().getId()} + '/update'}" class="btn btn-warning">Update</a>
+                    <a th:href="@{'/users/' + ${user.getId()} + '/workouts/' + ${workout.getValue().getId()} + '/delete'}" class="btn btn-danger">Delete</a>
+                    <span class="d-block"> <p class="d-inline fs-3">Last date completed: </p><p class="d-inline fs-3" th:text="${workout.getValue().getDate()}"></p></span>
                 </div>
             </div>
         </div>

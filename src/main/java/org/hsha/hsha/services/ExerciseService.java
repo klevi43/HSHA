@@ -39,15 +39,7 @@ public class ExerciseService {
         exerciseRepository.deleteById(exId);
     }
 
-    public Optional<Exercise> verifyExercise(int exerciseId, Optional<Workout> workout) throws ServerException {
-        return  checkExercise(exerciseId, workout);
-    }
 
-    private Optional<Exercise> checkExercise(int exerciseId, Optional<Workout> workout) throws ServerException {
-        Optional<Exercise> checkedExercise = exerciseRepository.findById(exerciseId);
-        if(checkedExercise.isEmpty() || !(checkedExercise.get().getWorkout().getId().equals(workout.get().getId()))) {
-            throw new ServerException("Exercise: " + exerciseId + " not found");
-        }
-        return checkedExercise;
-    }
+
+
 }

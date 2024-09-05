@@ -1,5 +1,6 @@
 package org.hsha.hsha.controllers;
 
+import jakarta.transaction.Transactional;
 import org.hsha.hsha.models.*;
 import org.hsha.hsha.services.ExSetService;
 import org.hsha.hsha.services.ExerciseService;
@@ -10,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.rmi.ServerException;
 import java.util.*;
@@ -86,7 +84,7 @@ public class WorkoutController {
         model.addAttribute("workoutExercises", workoutExercises);
         model.addAttribute("exerciseExSets", exerciseExSets);
         model.addAttribute("counter", counter);
-        return "workouts/userWorkout";
+        return "workouts/singleUserWorkout";
     }
 
     @GetMapping("/users/{userId}/workouts/add")
@@ -126,6 +124,46 @@ public class WorkoutController {
                     "name", e.getMessage()));
         }
 
+        return "redirect:/users/{userId}/workouts";
+    }
+
+
+    @GetMapping("/users/{userId}/workouts/{workoutId}/delete")
+    public String showConfirmDeletePage(@PathVariable int userId, @PathVariable int workoutId, Model model)
+        throws ServerException {
+        Optional<User> user = userService.retrieveUserById(userId);
+        if(user.isEmpty()) {
+            throw new ServerException("User: " + userId + " not found");
+        }
+
+        Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
+        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
+            throw new ServerException("Workout: " + workoutId + " not found");
+        }
+        model.addAttribute("user", user);
+        model.addAttribute("userWorkout", userWorkout);
+        model.addAttribute("workoutExercises", userWorkout.get().getExercises());
+
+        return "workouts/confirmDeleteWorkout";
+
+
+    }
+
+    @Transactional
+    @RequestMapping("/users/{userId}/workouts/{workoutId}/delete/confirm")
+    public String deleteWorkout(@PathVariable int userId, @PathVariable int workoutId)
+            throws ServerException {
+        Optional<User> user = userService.retrieveUserById(userId);
+        if(user.isEmpty()) {
+            throw new ServerException("User: " + userId + " not found");
+        }
+
+        Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
+        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
+            throw new ServerException("Workout: " + workoutId + " not found");
+        }
+
+        workoutService.deleteWorkoutById(workoutId);
         return "redirect:/users/{userId}/workouts";
     }
 }

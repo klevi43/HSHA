@@ -34,14 +34,5 @@ public class WorkoutService {
         return workoutRepository.save(workout);
     }
 
-    public Optional<Workout> verifyWorkout(int workoutId, Optional<User> user) throws ServerException {
-        return checkWorkout(workoutId, user);
-    }
-    private Optional<Workout> checkWorkout(int workoutId, Optional<User> user) throws ServerException {
-        Optional<Workout> checkedWorkout = workoutRepository.findById(workoutId);
-        if(checkedWorkout.isEmpty() || !(checkedWorkout.get().getUser().getId().equals( user.get().getId()))) {
-            throw new ServerException("Workout: " + workoutId + " not found");
-        }
-        return checkedWorkout;
-    }
+
 }
