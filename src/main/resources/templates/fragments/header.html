@@ -23,11 +23,18 @@
 <!--                Navbar Links -->
                 <div class="collapse navbar-collapse justify-content-end align-center"
                 id="main-nav">
-                    <ul class="navbar-nav ">
+                    <ul class="navbar-nav me-3">
                         <li sec:authorize="${#authorization.expression('isAnonymous()')}" class="nav-item nav-link"><a class="text-light text-decoration-none" th:href="@{/login}">Login</a></li>
-                        <li sec:authorize="${#authorization.expression('isAuthenticated()')}" class="nav-item nav-link"><a class="text-light text-decoration-none" th:href="@{/login}">Logout</a></li>
                         <li sec:authorize="${#authorization.expression('isAuthenticated()')}" class="nav-item nav-link"><a class="text-light text-decoration-none" href="#">My Dashboard</a></li>
                     </ul>
+                    <form sec:authorize="${#authorization.expression('isAuthenticated()')}" method="post" action="/logout">
+                        <input type="hidden" th:name="${_csrf.parameterName}"
+                            th:value="${_csrf.token}"/>
+                        <button type="submit" class="btn btn-danger">
+                            Logout
+                        </button>
+                    </form>
+
                 </div>
 
             </div>

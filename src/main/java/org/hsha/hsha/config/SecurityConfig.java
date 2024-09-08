@@ -11,6 +11,7 @@ import org.hsha.hsha.services.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.SecurityBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,6 +35,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
+//@EnableMethodSecurity
 public class SecurityConfig {
 
 
@@ -52,6 +54,7 @@ public class SecurityConfig {
                 .requestMatchers("/login").permitAll()
                 .requestMatchers("/users/register").permitAll()
                         .requestMatchers("/users/{userId}/**").access(userSecurity)
+                        .requestMatchers("/logout").permitAll()
                 .anyRequest().authenticated()
                 );
 
@@ -59,11 +62,11 @@ public class SecurityConfig {
         http.formLogin(form -> form.loginPage("/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                // Figure out how to implement custom redirect
+
                         .successHandler(customSuccessHandler())
                         .permitAll()
                 )
-                .logout(logout -> logout.permitAll());
+                .logout(logout -> logout.logoutSuccessUrl("/"));
         return http.build();
     }
 
