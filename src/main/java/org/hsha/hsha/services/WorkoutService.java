@@ -20,8 +20,12 @@ public class WorkoutService {
         return workoutRepository.findAll();
     }
 
-    public Optional<Workout> retrieveWorkoutById(int id) {
-        return workoutRepository.findById(id);
+    public Optional<Workout> retrieveWorkoutById(int id) throws ServerException {
+        Optional<Workout> searchedWorkout = workoutRepository.findById(id);
+        if(searchedWorkout.isEmpty()) {
+            throw new ServerException("Workout: " + id + " not found");
+        }
+        return searchedWorkout;
     }
     public Optional<Workout> retrieveWorkoutByName(String name) {
         return workoutRepository.findWorkoutByName(name);

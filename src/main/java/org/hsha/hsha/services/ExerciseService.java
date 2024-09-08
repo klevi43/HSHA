@@ -24,8 +24,12 @@ public class ExerciseService {
     public List<Exercise> retrieveAllExercisesByWorkoutId(Integer workoutId) {
         return exerciseRepository.findAllByWorkout_Id(workoutId);
     }
-    public Optional<Exercise> retrieveExerciseById(Integer exId) {
-        return exerciseRepository.findById(exId);
+    public Optional<Exercise> retrieveExerciseById(Integer exId) throws ServerException {
+        Optional<Exercise> searchedExercise = exerciseRepository.findById(exId);;
+        if(searchedExercise.isEmpty()) {
+            throw new ServerException("Exercise: " + exId + " not found");
+        }
+        return searchedExercise;
     }
 
     public Optional<Exercise> retrieveExerciseByname(String name) {

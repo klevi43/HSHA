@@ -20,8 +20,10 @@ public class ExSetService {
         return exSetRepository.findAll();
     }
     //
-    public Optional<ExSet> retrieveExSetById(Integer exId) {
-        return exSetRepository.findById(exId);
+    public Optional<ExSet> retrieveExSetById(Integer exSetId) throws ServerException {
+        Optional<ExSet> searchedExSets = exSetRepository.findById(exSetId);
+        validateExSet(searchedExSets, exSetId);
+        return searchedExSets;
     }
 
 
@@ -41,16 +43,11 @@ public class ExSetService {
         return exSetRepository.findAllByWorkout_Id(workoutId);
     }
 
-    public Optional<ExSet> verifyExSetById(Integer exSetId) throws ServerException {
-        return checkExSetById(exSetId);
-    }
 
-    private Optional<ExSet> checkExSetById(Integer exSetId) throws ServerException {
-        Optional<ExSet> checkedExSets = exSetRepository.findById(exSetId);
+    private static void validateExSet(Optional<ExSet> checkedExSets, Integer exSetId) throws ServerException {
         if (checkedExSets.isEmpty()) {
             throw new ServerException("ExSet id: " + exSetId + " not found.");
         }
-        return checkedExSets;
     }
 }
 

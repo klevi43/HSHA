@@ -34,7 +34,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label">Exercise name:</label>
                             <div class="col-sm-8">
-                                <input class="form-control" th:field="${exerciseDto.name}">
+                                <input class="form-control" th:field="${exerciseDto.name}" required="required">
                                 <p th:if="${#fields.hasErrors('name')}"
                                    th:errorclass="text-danger"
                                    th:errors="${exerciseDto.name}">
@@ -45,7 +45,8 @@
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label">Body Part Worked</label>
                             <div class="col-sm-8">
-                                <input class="form-control" type="text" th:field="${exerciseDto.bodyPart}">
+                                <input class="form-control" type="text" th:field="${exerciseDto.bodyPart}"
+                                       required="required">
                                 <p th:if="${#fields.hasErrors('bodyPart')}"
                                    th:errorclass="text-danger"
                                    th:errors="${exerciseDto.bodyPart}"></p>

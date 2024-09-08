@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -36,8 +37,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             redirectURL += "/admin/home";
         }
         else if (authentication.getAuthorities().stream().anyMatch(user -> user.getAuthority().equals("ROLE_USER"))) {
-            User user = userService.retrieveUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
-            redirectURL += "/users/" + user.getId().toString() + "/workouts";
+            Optional<User> user = userService.retrieveUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+            redirectURL += "/users/" + user.get().getId().toString() + "/workouts";
         }
         response.sendRedirect(redirectURL);
     }

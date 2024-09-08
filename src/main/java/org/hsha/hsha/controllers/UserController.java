@@ -7,7 +7,6 @@ import org.hsha.hsha.services.ExerciseService;
 import org.hsha.hsha.services.UserService;
 import org.hsha.hsha.services.WorkoutService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +15,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.rmi.ServerException;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +23,6 @@ import java.util.Optional;
 public class UserController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private WorkoutService workoutService;
-    @Autowired
-    private ExerciseService exerciseService;
-    @Autowired
-    private ExSetService exSetService;
-
 
 
     @GetMapping("/users")
@@ -52,7 +43,7 @@ public class UserController {
 
     // USER RELATED METHODS
     @PostMapping("/users/register")
-    public String createUser(Model model, @ModelAttribute RegisterDto registerDto, BindingResult result) {
+    public String createUser(Model model, @ModelAttribute RegisterDto registerDto, BindingResult result) throws ServerException {
         // check that the fields on the register form are valid
         if(!registerDto.getPassword().equals(registerDto.getConfirmPassword())) {
             result.addError(
@@ -62,8 +53,8 @@ public class UserController {
 
 
         }
-        User searchedUser = userService.retrieveUserByEmail(registerDto.getEmail());
-        if (searchedUser != null) {
+        Optional<User> searchedUser = userService.retrieveUserByEmail(registerDto.getEmail());
+        if (searchedUser.isPresent()) {
             result.addError(
                     new FieldError("registerDto", "email",
                             "Email address is already used")
@@ -115,7 +106,7 @@ public class UserController {
 //    }
 
     @GetMapping("/users/{id}")
-    public Optional<User> getUserById(@PathVariable(value = "id") Integer id) {
+    public Optional<User> getUserById(@PathVariable(value = "id") Integer id) throws ServerException {
         return userService.retrieveUserById(id);
     }
 

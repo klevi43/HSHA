@@ -39,13 +39,9 @@ public class ExerciseController {
 
         // Validate the user and workout
         Optional<User> user = userService.retrieveUserById(userId);
-        if(user.isEmpty()) {
-            throw new ServerException("User: " + userId + " not found");
-        }
+
         Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
-        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
-            throw new ServerException("Workout: " + workoutId + " not found");
-        }
+
 
 
 
@@ -61,13 +57,9 @@ public class ExerciseController {
                                        @ModelAttribute ExerciseDto exerciseDto, BindingResult result) throws ServerException {
         // Validate the user and workout
         Optional<User> user = userService.retrieveUserById(userId);
-        if(user.isEmpty()) {
-            throw new ServerException("User: " + userId + " not found");
-        }
+
         Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
-        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
-            throw new ServerException("Workout: " + workoutId + " not found");
-        }
+
 
 
         try {
@@ -89,17 +81,11 @@ public class ExerciseController {
             throws ServerException {
         // Validate the user, workout, and exercises
         Optional<User> user = userService.retrieveUserById(userId);
-        if(user.isEmpty()) {
-            throw new ServerException("User: " + userId + " not found");
-        }
+
         Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
-        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
-            throw new ServerException("Workout: " + workoutId + " not found");
-        }
+
         Optional<Exercise> workoutExercise = exerciseService.retrieveExerciseById(exerciseId);
-        if(workoutExercise.isEmpty() || !(workoutExercise.get().getWorkout().getId().equals(userWorkout.get().getId()))) {
-            throw new ServerException("Exercise: " + exerciseId + " not found");
-        }
+
 
         ExerciseDto exerciseDto = new ExerciseDto();
         model.addAttribute("user", user);
@@ -116,17 +102,11 @@ public class ExerciseController {
             throws ServerException {
         // Validate the user, workout, and exercises
         Optional<User> user = userService.retrieveUserById(userId);
-        if(user.isEmpty()) {
-            throw new ServerException("User: " + userId + " not found");
-        }
+
         Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
-        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
-            throw new ServerException("Workout: " + workoutId + " not found");
-        }
+
         Optional<Exercise> workoutExercise = exerciseService.retrieveExerciseById(exerciseId);
-        if(workoutExercise.isEmpty() || !(workoutExercise.get().getWorkout().getId().equals(userWorkout.get().getId()))) {
-            throw new ServerException("Exercise: " + exerciseId + " not found");
-        }
+
 
         try {
             workoutExercise.get().setWorkout(userWorkout.get());
@@ -146,17 +126,11 @@ public class ExerciseController {
                                          @PathVariable int exerciseId, Model model) throws ServerException {
         // Validate the user, workout, and exercises
         Optional<User> user = userService.retrieveUserById(userId);
-        if(user.isEmpty()) {
-            throw new ServerException("User: " + userId + " not found");
-        }
+
         Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
-        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
-            throw new ServerException("Workout: " + workoutId + " not found");
-        }
+
         Optional<Exercise> workoutExercise = exerciseService.retrieveExerciseById(exerciseId);
-        if(workoutExercise.isEmpty() || !(workoutExercise.get().getWorkout().getId().equals(userWorkout.get().getId()))) {
-            throw new ServerException("Exercise: " + exerciseId + " not found");
-        }
+
         List<ExSet> exerciseExSets = exSetService.retrieveAllExSetsByWorkoutId(workoutId);
         ThIterationCounter counter = new ThIterationCounter();
 
@@ -175,17 +149,10 @@ public class ExerciseController {
     public String deleteExercise(@PathVariable int userId,@PathVariable int workoutId,
                                  @PathVariable int exerciseId) throws ServerException {
         Optional<User> user = userService.retrieveUserById(userId);
-        if(user.isEmpty()) {
-            throw new ServerException("User: " + userId + " not found");
-        }
         Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
-        if(userWorkout.isEmpty() || !(userWorkout.get().getUser().getId().equals( user.get().getId()))) {
-            throw new ServerException("Workout: " + workoutId + " not found");
-        }
+
         Optional<Exercise> workoutExercise = exerciseService.retrieveExerciseById(exerciseId);
-        if(workoutExercise.isEmpty() || !(workoutExercise.get().getWorkout().getId().equals(userWorkout.get().getId()))) {
-            throw new ServerException("Exercise: " + exerciseId + " not found");
-        }
+
 
         exerciseService.deleteExerciseById(workoutExercise.get().getId());
 

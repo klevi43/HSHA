@@ -26,25 +26,32 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
-    public int retrieveUserIdByEmail(String email) throws Exception {
-        User searchedUser = userRepository.findByEmail(email);
-        if(searchedUser == null) {
-            throw new Exception("User does not exist");
+    public int retrieveUserIdByEmail(String email) throws ServerException {
+        Optional<User> searchedUser = userRepository.findByEmail(email);
+        if(searchedUser.isEmpty()) {
+            throw new ServerException("User does not exist");
         }
-        return searchedUser.getId();
+        return searchedUser.get().getId();
     }
 
     public List<User> retrieveAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> retrieveUserById(Integer id) {
-
-        return userRepository.findById(id);
+    public Optional<User> retrieveUserById(Integer id) throws ServerException {
+        Optional<User> searchedUser = userRepository.findById(id);
+        if(searchedUser.isEmpty()) {
+            throw new ServerException("User: " + id + " not found");
+        }
+        return searchedUser;
     }
 
-    public User retrieveUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public Optional<User> retrieveUserByEmail(String email) throws ServerException {
+        Optional<User> searchedUser = userRepository.findByEmail(email);
+        if(searchedUser.isEmpty()) {
+            throw new ServerException("User: " + email + " not found");
+        }
+        return searchedUser;
     }
     public User saveUser(User user) {
         validateDuplicateUser(user);
@@ -52,11 +59,12 @@ public class UserService implements UserDetailsService {
     }
 
     private void validateDuplicateUser(User user) {
-        User searchedUser = userRepository.findByEmail(user.getEmail());
-        if(searchedUser != null) {
+        Optional<User> searchedUser = userRepository.findByEmail(user.getEmail());
+        if(searchedUser.isPresent()) {
             throw new IllegalStateException("User already exists");
         }
     }
+
     public void deleteUserById(Integer id) {
         userRepository.deleteUserById(id);
     }
@@ -64,12 +72,12 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User appUser = userRepository.findByEmail(email);
+        Optional<User> appUser = userRepository.findByEmail(email);
 
-        if (appUser != null) {
-            var springUser = org.springframework.security.core.userdetails.User.withUsername(appUser.getEmail())
-                    .password(appUser.getPassword())
-                    .roles(appUser.getRole())
+        if (appUser.isPresent()) {
+            var springUser = org.springframework.security.core.userdetails.User.withUsername(appUser.get().getEmail())
+                    .password(appUser.get().getPassword())
+                    .roles(appUser.get().getRole())
                     .build();
 
             return springUser;
