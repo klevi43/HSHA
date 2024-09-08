@@ -27,10 +27,7 @@ public class UserService implements UserDetailsService {
     UserRepository userRepository;
 
     public int retrieveUserIdByEmail(String email) throws ServerException {
-        Optional<User> searchedUser = userRepository.findByEmail(email);
-        if(searchedUser.isEmpty()) {
-            throw new ServerException("User does not exist");
-        }
+        Optional<User> searchedUser = retrieveValidUserByEmail(email);
         return searchedUser.get().getId();
     }
 
@@ -39,18 +36,12 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> retrieveUserById(Integer id) throws ServerException {
-        Optional<User> searchedUser = userRepository.findById(id);
-        if(searchedUser.isEmpty()) {
-            throw new ServerException("User: " + id + " not found");
-        }
+        Optional<User> searchedUser = retrieveValidUserById(id);
         return searchedUser;
     }
 
     public Optional<User> retrieveUserByEmail(String email) throws ServerException {
-        Optional<User> searchedUser = userRepository.findByEmail(email);
-        if(searchedUser.isEmpty()) {
-            throw new ServerException("User: " + email + " not found");
-        }
+        Optional<User> searchedUser = retrieveValidUserByEmail(email);
         return searchedUser;
     }
     public User saveUser(User user) {
@@ -84,6 +75,20 @@ public class UserService implements UserDetailsService {
         }
         return null;
     }
+    private Optional<User> retrieveValidUserByEmail(String email) throws ServerException {
+        Optional<User> searchedUser = userRepository.findByEmail(email);
+        if(searchedUser.isEmpty()) {
+            throw new ServerException("User does not exist");
+        }
+        return searchedUser;
+    }
 
+    private Optional<User> retrieveValidUserById(Integer id) throws ServerException {
+        Optional<User> searchedUser = userRepository.findById(id);
+        if(searchedUser.isEmpty()) {
+            throw new ServerException("User: " + id + " not found");
+        }
+        return searchedUser;
+    }
 
 }
