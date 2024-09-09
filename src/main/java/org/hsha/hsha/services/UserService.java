@@ -36,13 +36,13 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> retrieveUserById(Integer id) throws ServerException {
-        Optional<User> searchedUser = retrieveValidUserById(id);
-        return searchedUser;
+        Optional<User> validUser = retrieveValidUserById(id);
+        return validUser;
     }
 
     public Optional<User> retrieveUserByEmail(String email) throws ServerException {
-        Optional<User> searchedUser = retrieveValidUserByEmail(email);
-        return searchedUser;
+        Optional<User> validUser = retrieveValidUserByEmail(email);
+        return validUser;
     }
     public User saveUser(User user) {
         validateDuplicateUser(user);

@@ -20,16 +20,11 @@ public class WorkoutService {
         return workoutRepository.findAll();
     }
 
-    public Optional<Workout> retrieveWorkoutById(int id) throws ServerException {
-        Optional<Workout> searchedWorkout = workoutRepository.findById(id);
-        if(searchedWorkout.isEmpty()) {
-            throw new ServerException("Workout: " + id + " not found");
-        }
-        return searchedWorkout;
+    public Optional<Workout> retrieveWorkoutById(Integer id) throws ServerException {
+        Optional<Workout> validWorkout = retrieveValidWorkoutById(id);
+        return validWorkout;
     }
-    public Optional<Workout> retrieveWorkoutByName(String name) {
-        return workoutRepository.findWorkoutByName(name);
-    }
+
 
     public void deleteWorkoutById(int id) {
         workoutRepository.deleteWorkoutById(id);
@@ -38,5 +33,11 @@ public class WorkoutService {
         return workoutRepository.save(workout);
     }
 
-
+    public Optional<Workout> retrieveValidWorkoutById(Integer id) throws ServerException {
+        Optional<Workout> searchedWorkout = workoutRepository.findById(id);
+        if(searchedWorkout.isEmpty()) {
+            throw new ServerException("Workout: " + id + " not found");
+        }
+        return searchedWorkout;
+    }
 }

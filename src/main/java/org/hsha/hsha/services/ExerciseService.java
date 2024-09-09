@@ -24,17 +24,12 @@ public class ExerciseService {
     public List<Exercise> retrieveAllExercisesByWorkoutId(Integer workoutId) {
         return exerciseRepository.findAllByWorkout_Id(workoutId);
     }
-    public Optional<Exercise> retrieveExerciseById(Integer exId) throws ServerException {
-        Optional<Exercise> searchedExercise = exerciseRepository.findById(exId);;
-        if(searchedExercise.isEmpty()) {
-            throw new ServerException("Exercise: " + exId + " not found");
-        }
-        return searchedExercise;
+    public Optional<Exercise> retrieveExerciseById(Integer id) throws ServerException {
+        Optional<Exercise> validExercise = retrieveValidExerciseById(id);
+        return validExercise;
     }
 
-    public Optional<Exercise> retrieveExerciseByname(String name) {
-        return exerciseRepository.findByNameContaining(name);
-    }
+
     public Exercise saveExercise(Exercise exercise) {
         return exerciseRepository.save(exercise);
     }
@@ -44,6 +39,12 @@ public class ExerciseService {
     }
 
 
-
+    private Optional<Exercise> retrieveValidExerciseById(Integer id) throws ServerException {
+        Optional<Exercise> searchedExercise = exerciseRepository.findById(id);;
+        if(searchedExercise.isEmpty()) {
+            throw new ServerException("Exercise: " + id + " not found");
+        }
+        return searchedExercise;
+    }
 
 }
