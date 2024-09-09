@@ -32,7 +32,9 @@ public class WorkoutController {
 
     // get all workouts for a user
     @GetMapping("/users/{userId}/workouts")
-    public String getWorkoutsPage(@PathVariable int userId, Model model) throws Exception {
+    public String getWorkoutsPage(@PathVariable int userId,
+                                  Model model)
+            throws Exception {
 
         // check if user is valid
         Optional<User> user = userService.retrieveUserById(userId);
@@ -59,7 +61,9 @@ public class WorkoutController {
     }
 
             @GetMapping("/users/{userId}/workouts/{workoutId}")
-    public String showSingleWorkoutPage(@PathVariable int userId, @PathVariable int workoutId, Model model)
+    public String showSingleWorkoutPage(@PathVariable int userId,
+                                        @PathVariable int workoutId,
+                                        Model model)
             throws ServerException {
 
         Optional<User> user = userService.retrieveUserById(userId);
@@ -81,7 +85,9 @@ public class WorkoutController {
     }
 
     @GetMapping("/users/{userId}/workouts/add")
-    public String showAddWorkoutsPage(@PathVariable int userId, Model model ) throws Exception {
+    public String showAddWorkoutsPage(@PathVariable int userId,
+                                      Model model )
+            throws Exception {
         // check if user is valid
         Optional<User> user = userService.retrieveUserById(userId);
 
@@ -97,7 +103,10 @@ public class WorkoutController {
     }
 
     @PostMapping("/users/{userId}/workouts/add")
-    public String addWorkout(@PathVariable int userId, @ModelAttribute WorkoutDto workoutDto, BindingResult result) throws ServerException {
+    public String addWorkout(@PathVariable int userId,
+                             @ModelAttribute WorkoutDto workoutDto,
+                             BindingResult result)
+            throws ServerException {
         Optional<User> user = userService.retrieveUserById(userId);
 
 
@@ -115,14 +124,50 @@ public class WorkoutController {
 
         return "redirect:/users/{userId}/workouts";
     }
-
-
-    @GetMapping("/users/{userId}/workouts/{workoutId}/delete")
-    public String showConfirmDeletePage(@PathVariable int userId, @PathVariable int workoutId, Model model)
-        throws ServerException {
+    @GetMapping("/users/{userId}/workouts/{workoutId}/update")
+    public String showUpdateWorkoutPage(@PathVariable int userId,
+                                        @PathVariable int workoutId,
+                                        Model model)
+            throws ServerException {
+        // validate user and workout
         Optional<User> user = userService.retrieveUserById(userId);
+        Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
 
+        WorkoutDto workoutDto = new WorkoutDto();
+        model.addAttribute("user", user);
+        model.addAttribute("userWorkout", userWorkout);
+        model.addAttribute("workoutDto", workoutDto);
 
+        return "workouts/updateWorkout";
+    }
+
+    @RequestMapping("/users/{userId}/workouts/{workoutId}/update")
+    public String updateWorkout(@PathVariable int userId,
+                                @PathVariable int workoutId,
+                                @ModelAttribute WorkoutDto workoutDto,
+                                BindingResult result)
+            throws ServerException {
+        // validate user and workout
+        Optional<User> user = userService.retrieveUserById(userId);
+        Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
+         try {
+             userWorkout.get().setName(workoutDto.getName());
+             userWorkout.get().setDate(workoutDto.getDate());
+             workoutService.saveWorkout(userWorkout.get());
+         } catch (Exception e) {
+             result.addError(new FieldError("workoutDto",
+                     "name", e.getMessage()));
+         }
+         return "redirect:/users/{userId}/workouts";
+    }
+    @GetMapping("/users/{userId}/workouts/{workoutId}/delete")
+    public String showConfirmDeletePage(@PathVariable int userId,
+                                        @PathVariable int workoutId,
+                                        Model model)
+        throws ServerException {
+
+        // Verify user and user's workouts
+        Optional<User> user = userService.retrieveUserById(userId);
         Optional<Workout> userWorkout = workoutService.retrieveWorkoutById(workoutId);
 
         model.addAttribute("user", user);
