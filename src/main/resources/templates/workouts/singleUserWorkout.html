@@ -20,11 +20,15 @@
             <h1 class="display-2 d-inline fw-bold" th:text="${userWorkout.name}"></h1>
 
             <h1 class="display-2 d-inline fw-normal text-end" th:text="${userWorkout.date}"></h1>
-
-
         </div>
+
         <div class="row">
-            <p class="m-4 fs-3">Go back to <a class="text-white fs-3" th:href="'/users/' + ${user.get().id} + '/workouts'">Workouts</a></p>
+            <p class="d-flex justify-content-between fs-3">
+                <span class="mt-3 ms-4">Go back to <a class="text-white fs-3" th:href="'/users/' + ${user.get().id} + '/workouts'">Workouts</a></span>
+                <span class="me-4">Did you workout today? <br>
+                    Let's log a <a th:href="'/users/' + ${user.get().getId()} + '/workouts/' + ${userWorkout.getId()} + '/log'">new entry</a></span>
+            </p>
+
         </div>
 
         <div class="mx-4" th:if="${workoutExercises.isEmpty()}">
